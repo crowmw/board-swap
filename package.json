@@ -1,7 +1,7 @@
 {
-	"name": "next-auth-apollo",
+	"name": "board-swap",
 	"version": "0.1.0",
-	"description": "Authentication Example with Next.js and Apollo GraphQL",
+	"description": "Next.js and Apollo GraphQL",
 	"main": "index.js",
 	"scripts": {
 		"dev": "nodemon --watch data --watch server server",

@@ -24,7 +24,19 @@ const userSchema = new Schema({
 		id: String,
 		name: String,
 		email: String
-	}
+	},
+	boardGames: [{
+		type: Schema.Types.ObjectId, ref: 'BoardGame'
+	}],
+	boardGamesWanted: [{
+		type: Schema.Types.ObjectId, ref: 'BoardGame'
+	}],
+	boardGamesUnwanted: [{
+		type: Schema.Types.ObjectId, ref: 'BoardGame'
+	}],
+	boardGamesToSwap: [{
+		type: Schema.Types.ObjectId, ref: 'BoardGame'
+	}]
 })
 
 userSchema.plugin(passportLocalMongoose, {

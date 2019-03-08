@@ -1,5 +1,11 @@
 const User = require('../models/User')
 const passport = require('passport')
+const boardGameController = require('../controllers/boardGameController')
+
+const prepare = (o) => {
+	o._id = o._id.toString()
+	return o
+}
 
 module.exports = {
 	Query: {
@@ -11,7 +17,9 @@ module.exports = {
 
 				return reject('Not Authenticated!')
 			})
-		}
+		},
+		boardGame(root, { _id }) { return boardGameController.fetchPost(_id) },
+		boardGames() { return boardGameController.fetchPosts() }
 	},
 	Mutation: {
 		createUser(root, { email, fullname, password }, { login }) {
@@ -49,6 +57,7 @@ module.exports = {
 					}
 				})({}, { statusCode, setHeader, end })
 			})
-		}
+		},
+		createBoardGame: boardGameController.createBoardGame
 	}
 }
