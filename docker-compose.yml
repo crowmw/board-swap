@@ -1,22 +1,18 @@
 version: "2"
 services:
   app:
-    # container_name: board-swap
     build: .
     command: npm run start
-    # volumes: 
-    #   - .:/usr/app/
-    #   - /usr/app/node_modules
     ports: 
       - "3000:3000"
     depends_on:
       - mongo
     env_file: .env
-    # restart: always
   mongo:
-    # container_name: board-swap-db
-    image: mongo
+    image: mongo:latest
     ports:
-      - "27017:27017"
-    # volumes:
-    #   - ./data:/data/db
+      - "27018:27017"
+    volumes:
+      - mongodata:/data/db
+volumes:
+  mongodata:

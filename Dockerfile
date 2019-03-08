@@ -10,7 +10,7 @@ COPY . .
 
 RUN npm install -g nodemon
 
-ENV MONGODB_URI=mongodb://mongo:27017/board-swap-db
+ENV MONGODB_URI=mongodb://mongo:27017/board-swap
 ENV NODE_ENV=production
 ENV PORT=3000
 
