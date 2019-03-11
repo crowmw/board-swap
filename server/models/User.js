@@ -35,7 +35,7 @@ const userSchema = new Schema({
 		type: Schema.Types.ObjectId, ref: 'BoardGame'
 	}],
 	boardGamesToSwap: [{
-		type: Schema.Types.ObjectId, ref: 'BoardGame'
+		type: Schema.Types.ObjectId, ref: 'UserBoardGame'
 	}]
 })
 

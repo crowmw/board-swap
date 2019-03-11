@@ -10,9 +10,11 @@ module.exports = {
       return reject('no games')
     })
   },
-  fetchPosts() {
+  fetchPosts({ find, skip, first, orderBy }) {
     return new Promise((resolve, reject) => {
-      const boardGame = BoardGame.find({})
+      const boardGame = find
+        ? BoardGame.find({ name: { "$regex": find, "$options": "i" } }).limit(limit)
+        : BoardGame.find({}).limit(limit)
       if (boardGame) {
         return resolve(boardGame)
       }
