@@ -9,7 +9,7 @@ class Index extends React.Component {
     const { loggedInUser } = await checkLoggedIn(context, apolloClient)
 
     return {
-      user: loggedInUser.profile
+      user: loggedInUser.user
     }
   }
 

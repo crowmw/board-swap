@@ -2,14 +2,15 @@ const { makeExecutableSchema } = require('graphql-tools')
 const resolvers = require('./resolvers')
 
 const typeDefs = `
-enum BoardGameOrderByInput {
-  name_ASC
-  name_DESC
-  createdAt_ASC
-	createdAt_DESC
-	updatedAt_ASC
-	updatedAt_DESC
-}
+	enum BoardGameOrderByEnum {
+		name_ASC
+		name_DESC
+		createdAt_ASC
+		createdAt_DESC
+		updatedAt_ASC
+		updatedAt_DESC
+	}
+
 	type User {
 		_id: ID!
 		email: String
@@ -48,10 +49,20 @@ enum BoardGameOrderByInput {
 		name: String,
 		email: String
 	}
+
+	input BoardGameInput {
+		name: String!
+		originalName: String 
+		year: Int 
+		designer: String 
+		artist: String
+		thumbnail: String!
+	}
+
 	type Query {
-		profile: User
+		user: User
 		boardGame(_id: ID!): BoardGame
-		boardGames(find: String, skip: Int, Sfirst: Int, orderBy: BoardGameOrderByInput): [BoardGame]!
+		boardGames(find: String, skip: Int, first: Int, orderBy: BoardGameOrderByEnum): [BoardGame]!
 		userBoardGame(_id: ID!): UserBoardGame
 		userBoardGames: [UserBoardGame]!
 	}
@@ -59,7 +70,7 @@ enum BoardGameOrderByInput {
 		createUser(email: String!, fullname: String, password: String!): User
 		login(email: String!, password: String!): User
 		authGithub: User
-		createBoardGame(name: String!, originalName: String, year: Int, designer: String, artist: String, thumbnail: String!): BoardGame
+		createBoardGame(boardGame: BoardGameInput): BoardGame
 	}
 `
 

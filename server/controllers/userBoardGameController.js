@@ -1,20 +1,32 @@
-const UserBoardGame = require('../models/BoardGame')
+const UserBoardGame = require('../models/UserBoardGame')
+
+const prepareId = (o) => {
+  o._id = o._id.toString()
+  return o
+}
 
 module.exports = {
   fetchUserBoardGame(id) {
     return new Promise((resolve, reject) => {
-      return UserBoardGame.findOne({ _id: id }, (err, ubg) => {
-        if (err) return reject(err)
-        return resolve(ubg)
-      })
+      return UserBoardGame.findOne({ _id: id })
+        .populate('user')
+        .populate('boardGame')
+        .exec((err, ubg) => {
+          if (err) return reject(err)
+          return resolve(prepareId(ubg))
+        })
     })
   },
   fetchUserBoardGames() {
     return new Promise((resolve, reject) => {
-      return UserBoardGame.find({}, (err, ubgs) => {
-        if (err) return reject(err)
-        return resolve(ubgs)
-      })
+      return UserBoardGame.find({})
+        .populate('user')
+        .populate('boardGame')
+        .exec((err, ubgs) => {
+          if (err) return reject(err)
+          console.log(ubgs)
+          return resolve(ubgs.map(prepareId))
+        })
     })
   }
   // fetchPosts() {

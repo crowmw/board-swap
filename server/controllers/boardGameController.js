@@ -1,39 +1,71 @@
 const BoardGame = require('../models/BoardGame')
 
+const prepareId = (o) => {
+  o._id = o._id.toString()
+  return o
+}
+
 module.exports = {
-  fetchPost(id) {
+  fetchBoardGame(id) {
     return new Promise((resolve, reject) => {
-      const boardGames = BoardGame.findOne({ _id: id })
-      if (boardGames) {
-        return resolve(boardGames)
+      const boardGame = BoardGame.findOne({ _id: id })
+      if (boardGame) {
+        return resolve(prepareId(boardGame))
       }
       return reject('no games')
     })
   },
-  fetchPosts({ find, skip, first, orderBy }) {
+  fetchBoardGames({ find, skip, first, orderBy }) {
     return new Promise((resolve, reject) => {
-      const boardGame = find
-        ? BoardGame.find({ name: { "$regex": find, "$options": "i" } }).limit(limit)
-        : BoardGame.find({}).limit(limit)
-      if (boardGame) {
-        return resolve(boardGame)
+      const boardGames = find
+        ? BoardGame.find({ name: { "$regex": find, "$options": "i" } })
+        : BoardGame.find({})
+
+      if (skip) {
+        boardGames.skip(skip)
       }
-      return reject('no game')
+
+      if (first) {
+        boardGames.limit(first)
+      }
+
+      if (orderBy) {
+        switch (orderBy) {
+          case 'name_ASC':
+            boardGames.sort({ name: 'asc' })
+          case 'name_DESC':
+            boardGames.sort({ name: 'desc' })
+          case 'createdAt_ASC':
+            boardGames.sort({ createdAt: 'asc' })
+          case 'createdAt_DESC':
+            boardGames.sort({ createdAt: 'desc' })
+          case 'updatedAt_ASC':
+            boardGames.sort({ updatedAt: 'asc' })
+          case 'updatedAt_DESC':
+            boardGames.sort({ updatedAt: 'asc' })
+        }
+      }
+
+      boardGames.exec((err, bgs) => {
+        if (err) return reject(err)
+        if (bgs) {
+          return resolve(bgs.map(prepareId))
+        }
+        return resolve(bgs)
+      })
     })
   },
-  createBoardGame(root, args) {
-    return new Promise((resolve, reject) => {
-      return BoardGame.findOne({ name: args.name }, (err, boardGame) => {
-        if (err) return reject(err)
+  createBoardGame(boardGame) {
+    return BoardGame.findOne({ name: boardGame.name }, (err, bg) => {
+      if (err) return err
 
-        if (boardGame) return reject('boardGame exists')
+      if (bg) return 'boardGame exists'
 
-        const newBoardGame = new BoardGame(args)
-        return newBoardGame.save(err => {
-          if (err) return reject(err)
+      const newBoardGame = new BoardGame(boardGame)
+      return newBoardGame.save(err => {
+        if (err) return err
 
-          return resolve(newBoardGame)
-        })
+        return prepareId(newBoardGame)
       })
     })
   }

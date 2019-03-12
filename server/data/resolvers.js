@@ -3,24 +3,24 @@ const passport = require('passport')
 const boardGameController = require('../controllers/boardGameController')
 const userBoardGameController = require('../controllers/userBoardGameController')
 
-const prepare = (o) => {
+const prepareId = (o) => {
 	o._id = o._id.toString()
 	return o
 }
 
 module.exports = {
 	Query: {
-		profile(root, args, context) {
+		user(root, args, context) {
 			return new Promise((resolve, reject) => {
 				if (context.user) {
-					return resolve(context.user)
+					return resolve(prepareId(context.user))
 				}
 
 				return reject('Not Authenticated!')
 			})
 		},
-		boardGame: (root, { _id }) => boardGameController.fetchPost(_id),
-		boardGames: (root, { find, skip, first, orderBy }) => boardGameController.fetchPosts({ find, skip, first, orderBy }),
+		boardGame: (root, { _id }) => boardGameController.fetchBoardGame(_id),
+		boardGames: (root, { find, skip, first, orderBy }) => boardGameController.fetchBoardGames({ find, skip, first, orderBy }),
 		userBoardGame: (root, { _id }) => userBoardGameController.fetchUserBoardGame(_id),
 		userBoardGames: () => userBoardGameController.fetchUserBoardGames()
 	},
@@ -61,6 +61,6 @@ module.exports = {
 				})({}, { statusCode, setHeader, end })
 			})
 		},
-		createBoardGame: boardGameController.createBoardGame
+		createBoardGame: (boardGame) => boardGameController.createBoardGame(boardGame)
 	}
 }
