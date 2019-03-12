@@ -42,8 +42,8 @@ app.prepare().then(() => {
   // This keeps users logged in
   server.use(
     session({
-      secret: 'keyboard cat',
-      key: 'token',
+      secret: process.env.AUTH_SECRET || 'keyboard cat',
+      key: process.env.AUTH_KEY || 'token',
       resave: false,
       saveUninitialized: false,
       store: new MongoStore({

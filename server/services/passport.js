@@ -8,9 +8,9 @@ const GitHubStrategy = require('passport-github').Strategy
 passport.use(
   new GitHubStrategy(
     {
-      clientID: process.env.GithubClientID,
-      clientSecret: process.env.GithubClientSecret,
-      callbackURL: process.env.GithubCallbackURL,
+      clientID: process.env.GITHUB_CLIENT_ID,
+      clientSecret: process.env.GITHUB_CLIENT_SECRET,
+      callbackURL: process.env.GITHUB_CALLBACK_URL,
       passReqToCallback: true
     },
     (req, accessToken, refreshToken, profile, cb) => {
