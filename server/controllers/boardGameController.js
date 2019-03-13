@@ -8,7 +8,7 @@ const prepareId = (o) => {
 module.exports = {
   fetchBoardGame(id) {
     return new Promise((resolve, reject) => {
-      const boardGame = BoardGame.findOne({ _id: id })
+      const boardGame = BoardGame.findOne({ _id: id }).populate('category')
       if (boardGame) {
         return resolve(prepareId(boardGame))
       }
@@ -20,6 +20,7 @@ module.exports = {
       const boardGames = find
         ? BoardGame.find({ name: { "$regex": find, "$options": "i" } })
         : BoardGame.find({})
+      boardGames.populate('category')
 
       if (skip) {
         boardGames.skip(skip)
@@ -67,6 +68,13 @@ module.exports = {
 
         return prepareId(newBoardGame)
       })
+    })
+  },
+  updateBoardGame(boardGame) {
+    console.log(boardGame)
+    return BoardGame.findByIdAndUpdate({ _id: boardGame._id }, boardGame, (err, bg) => {
+      if (err) return err
+      return prepareId(bg)
     })
   }
 }

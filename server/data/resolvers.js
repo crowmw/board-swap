@@ -1,7 +1,9 @@
 const User = require('../models/User')
 const passport = require('passport')
+const userController = require('../controllers/userController')
 const boardGameController = require('../controllers/boardGameController')
 const userBoardGameController = require('../controllers/userBoardGameController')
+const categoryController = require('../controllers/categoryController')
 
 const prepareId = (o) => {
 	o._id = o._id.toString()
@@ -21,6 +23,8 @@ module.exports = {
 		},
 		boardGame: (root, { _id }) => boardGameController.fetchBoardGame(_id),
 		boardGames: (root, { find, skip, first, orderBy }) => boardGameController.fetchBoardGames({ find, skip, first, orderBy }),
+		category: (root, { _id }) => categoryController.fetchCategory(_id),
+		categories: () => categoryController.fetchCategories(),
 		userBoardGame: (root, { _id }) => userBoardGameController.fetchUserBoardGame(_id),
 		userBoardGames: () => userBoardGameController.fetchUserBoardGames()
 	},
@@ -50,17 +54,15 @@ module.exports = {
 				})
 			})
 		},
-		authGithub(root, args, { statusCode, setHeader, res }) {
+		addUserBoardGame: (root, { _id }, { user }) => {
 			return new Promise((resolve, reject) => {
-				return passport.authenticate('github', (err, user) => {
-					if (user) {
-						resolve(user)
-					} else {
-						reject(err)
-					}
-				})({}, { statusCode, setHeader, end })
+				if (user) {
+					return resolve(userController.putUserBoardGame(user._id, _id))
+				}
+				return reject('Not Authenticated!')
 			})
 		},
-		createBoardGame: (boardGame) => boardGameController.createBoardGame(boardGame)
+		createBoardGame: (root, arguments) => boardGameController.createBoardGame(arguments.boardGame),
+		updateBoardGame: (root, arguments) => boardGameController.updateBoardGame(arguments.boardGame)
 	}
 }

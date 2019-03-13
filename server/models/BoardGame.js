@@ -16,7 +16,11 @@ const boardGameSchema = new Schema({
   year: Number,
   designer: String,
   artist: String,
-  thumbnail: String
+  thumbnail: String,
+  bggId: String,
+  category: [
+    { type: Schema.Types.ObjectId, ref: 'Category' }
+  ]
 },
   {
     timestamps: true
