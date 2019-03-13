@@ -71,7 +71,6 @@ module.exports = {
     })
   },
   updateBoardGame(boardGame) {
-    console.log(boardGame)
     return BoardGame.findByIdAndUpdate({ _id: boardGame._id }, boardGame, (err, bg) => {
       if (err) return err
       return prepareId(bg)

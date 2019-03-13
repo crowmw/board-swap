@@ -1,7 +1,5 @@
 const mongoose = require('mongoose')
 const validator = require('validator')
-const mongodbErrorHandler = require('mongoose-mongodb-errors')
-const passportLocalMongoose = require('passport-local-mongoose')
 
 const Schema = mongoose.Schema
 mongoose.Promise = global.Promise
@@ -18,6 +16,10 @@ const userSchema = new Schema({
 				cb(validator.isEmail(v), `${v} is not a valid email address`)
 		},
 		required: 'Please Supply an email address'
+	},
+	password: {
+		type: String,
+		required: 'Password is required'
 	},
 	fullname: String,
 	github: {
@@ -38,14 +40,5 @@ const userSchema = new Schema({
 		type: Schema.Types.ObjectId, ref: 'UserBoardGame'
 	}]
 })
-
-userSchema.plugin(passportLocalMongoose, {
-	usernameField: 'email',
-	errorMessages: {
-		UserExistsError: 'Email Already Exists'
-	}
-})
-
-userSchema.plugin(mongodbErrorHandler)
 
 module.exports = mongoose.model('User', userSchema)

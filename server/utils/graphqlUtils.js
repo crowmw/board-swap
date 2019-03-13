@@ -3,13 +3,12 @@ module.exports = {
     o._id = o._id.toString()
     return o
   },
-  authorized: (root, args, context) => {
-    return new Promise((resolve, reject) => {
-      if (context.user) {
-        return resolve(prepareId(context.user))
-      }
+  authenticated: next => (root, args, context, info) => {
+    console.log(context)
+    if (!context.isAuth) {
+      throw new Error('Not Authenticated!')
+    }
 
-      return reject('Not Authenticated!')
-    })
+    return next(root, args, context, info)
   }
 }

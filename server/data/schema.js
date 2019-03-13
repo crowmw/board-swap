@@ -51,6 +51,11 @@ const typeDefs = `
 		shippingPrice: Float
 		note: String
 	}
+	type AuthData {
+		userId: ID!
+		token: String!
+		tokenExpiration: Int!
+	}
 
 	input BoardGameCreateInput {
 		name: String!
@@ -84,7 +89,7 @@ const typeDefs = `
 
 	type Mutation {
 		createUser(email: String!, fullname: String, password: String!): User
-		login(email: String!, password: String!): User
+		login(email: String!, password: String!): AuthData!
 		addUserBoardGame(_id: String!): User
 		createBoardGame(boardGame: BoardGameCreateInput): BoardGame
 		updateBoardGame(boardGame: BoardGameUpdateInput): BoardGame

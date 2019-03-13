@@ -24,7 +24,6 @@ module.exports = {
         .populate('boardGame')
         .exec((err, ubgs) => {
           if (err) return reject(err)
-          console.log(ubgs)
           return resolve(ubgs.map(prepareId))
         })
     })
