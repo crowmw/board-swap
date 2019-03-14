@@ -7,7 +7,7 @@ module.exports = {
     try {
       const user = await User.findById(id).populate('boardGames')
       if (!user) throw new Error('User not found')
-
+      console.log('USER', user)
       return prepareId(user)
     } catch (err) {
       throw err

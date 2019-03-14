@@ -6,17 +6,17 @@ const prepareId = (o) => {
 }
 
 module.exports = {
-  fetchBoardGame(id) {
-    return new Promise((resolve, reject) => {
-      const boardGame = BoardGame.findOne({ _id: id }).populate('category')
-      if (boardGame) {
-        return resolve(prepareId(boardGame))
-      }
-      return reject('no games')
-    })
+  fetchBoardGame: async (id) => {
+    try {
+      const boardGame = await BoardGame.findOne({ _id: id }).populate('category')
+      if (!boardGame) throw new Error('BoardGame not found')
+      return prepareId(boardGame)
+    } catch (err) {
+      throw err
+    }
   },
-  fetchBoardGames({ find, skip, first, orderBy }) {
-    return new Promise((resolve, reject) => {
+  fetchBoardGames: async ({ find, skip, first, orderBy }) => {
+    try {
       const boardGames = find
         ? BoardGame.find({ name: { "$regex": find, "$options": "i" } })
         : BoardGame.find({})
@@ -47,33 +47,29 @@ module.exports = {
         }
       }
 
-      boardGames.exec((err, bgs) => {
-        if (err) return reject(err)
-        if (bgs) {
-          return resolve(bgs.map(prepareId))
-        }
-        return resolve(bgs)
-      })
-    })
+      const result = await boardGames.exec()
+
+      if (!result) throw new Error('BoardGames not found')
+
+      return result.map(prepareId)
+    } catch (err) {
+      throw err
+    }
   },
-  createBoardGame(boardGame) {
-    return BoardGame.findOne({ name: boardGame.name }, (err, bg) => {
-      if (err) return err
+  createBoardGame: async (boardGame) => {
+    const existingBoardGame = await BoardGame.findOne({ name: boardGame.name })
+    if (existingBoardGame) throw new Error('BoardGame name is already taken')
 
-      if (bg) return 'boardGame exists'
+    const newBoardGame = new BoardGame(boardGame)
+    const result = await newBoardGame.save()
+    if (!result) throw new Error('Error occured on save new BoardGame!')
 
-      const newBoardGame = new BoardGame(boardGame)
-      return newBoardGame.save(err => {
-        if (err) return err
-
-        return prepareId(newBoardGame)
-      })
-    })
+    return prepareId(result)
   },
-  updateBoardGame(boardGame) {
-    return BoardGame.findByIdAndUpdate({ _id: boardGame._id }, boardGame, (err, bg) => {
-      if (err) return err
-      return prepareId(bg)
-    })
+  updateBoardGame: async (boardGame) => {
+    const result = await BoardGame.findByIdAndUpdate({ _id: boardGame._id }, boardGame)
+    if (!result) throw new Error('Error occured on update new BoardGame!')
+    if (err) return err
+    return prepareId(bg)
   }
 }

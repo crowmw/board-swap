@@ -7,7 +7,7 @@ const authenticated = require('../utils/graphqlUtils').authenticated
 
 module.exports = {
 	Query: {
-		user: authenticated((root, args, context) => userController.fetchUser(context.user._id)),
+		user: authenticated((root, args, context) => userController.fetchUser(context.userId)),
 		boardGame: (root, { _id }) => boardGameController.fetchBoardGame(_id),
 		boardGames: (root, { find, skip, first, orderBy }) => boardGameController.fetchBoardGames({ find, skip, first, orderBy }),
 		category: (root, { _id }) => categoryController.fetchCategory(_id),

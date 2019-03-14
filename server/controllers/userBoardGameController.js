@@ -1,9 +1,5 @@
 const UserBoardGame = require('../models/UserBoardGame')
-
-const prepareId = (o) => {
-  o._id = o._id.toString()
-  return o
-}
+const prepareId = require('../utils/graphqlUtils').prepareId
 
 module.exports = {
   fetchUserBoardGame(id) {
@@ -28,29 +24,4 @@ module.exports = {
         })
     })
   }
-  // fetchPosts() {
-  //   return new Promise((resolve, reject) => {
-  //     const boardGame = BoardGame.find({})
-  //     if (boardGame) {
-  //       return resolve(boardGame)
-  //     }
-  //     return reject('no game')
-  //   })
-  // },
-  // createBoardGame(root, args) {
-  //   return new Promise((resolve, reject) => {
-  //     return BoardGame.findOne({ name: args.name }, (err, boardGame) => {
-  //       if (err) return reject(err)
-
-  //       if (boardGame) return reject('boardGame exists')
-
-  //       const newBoardGame = new BoardGame(args)
-  //       return newBoardGame.save(err => {
-  //         if (err) return reject(err)
-
-  //         return resolve(newBoardGame)
-  //       })
-  //     })
-  //   })
-  // }
 }
