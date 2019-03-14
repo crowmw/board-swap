@@ -1,5 +1,4 @@
 const mongoose = require('mongoose')
-const validator = require('validator')
 
 const Schema = mongoose.Schema
 mongoose.Promise = global.Promise
@@ -10,18 +9,15 @@ const userSchema = new Schema({
 		unique: true,
 		lowercase: true,
 		trim: true,
-		validate: {
-			isAsync: true,
-			validator: (v, cb) =>
-				cb(validator.isEmail(v), `${v} is not a valid email address`)
-		},
 		required: 'Please Supply an email address'
 	},
 	password: {
 		type: String,
 		required: 'Password is required'
 	},
-	fullname: String,
+	role: { type: String, enum: ['user', 'moderator', 'admin'] },
+	username: String,
+	bggUsername: String,
 	github: {
 		id: String,
 		name: String,

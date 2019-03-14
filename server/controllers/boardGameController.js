@@ -15,6 +15,15 @@ module.exports = {
       throw err
     }
   },
+  fetchBoardGameByBggId: async (bggId) => {
+    try {
+      const boardGame = await BoardGame.findOne({ bggId: bggId }).populate('category')
+      if (!boardGame) throw new Error('BoardGame not found')
+      return prepareId(boardGame)
+    } catch (err) {
+      throw err
+    }
+  },
   fetchBoardGames: async ({ find, skip, first, orderBy }) => {
     try {
       const boardGames = find

@@ -14,7 +14,8 @@ const typeDefs = `
 	type User {
 		_id: ID!
 		email: String
-		fullname: String
+		username: String
+		bggUsername: String
 		boardGames: [BoardGame]
 		boardGamesWanted: [BoardGame]
 		boardGamesUnwanted: [BoardGame]
@@ -32,11 +33,15 @@ const typeDefs = `
 		originalName: String
 		year: Int
 		designer: String
-		artist: String
+		minPlayers: String
+		maxPlayers: String
+		playingTime: Int
+		age: Int
 		thumbnail: String
+		image: String
 		createdAt: String
 		updatedAt: String
-		bggId: String
+		bggId: ID
 		category: [Category]
 	}
 	type UserBoardGame {
@@ -62,8 +67,13 @@ const typeDefs = `
 		originalName: String 
 		year: Int 
 		designer: String 
-		artist: String
-		thumbnail: String!
+		minPlayers: String
+		maxPlayers: String
+		playingTime: Int
+		age: Int
+		thumbnail: String
+		image: String
+		bggId: String
 		category: [String]
 	}
 	input BoardGameUpdateInput {
@@ -72,9 +82,13 @@ const typeDefs = `
 		originalName: String,
 		year: Int,
 		designer: String,
-		artist: String,
+		minPlayers: String
+		maxPlayers: String
+		playingTime: Int
+		age: Int
 		thumbnail: String,
-		bggId: String
+		image: String
+		bggId: ID
 	}
 
 	type Query {
@@ -85,14 +99,17 @@ const typeDefs = `
 		categories: [Category]
 		userBoardGame(_id: ID!): UserBoardGame
 		userBoardGames: [UserBoardGame]!
+		bggBoardGame(bggId: String!): BoardGame
+		bggUserCollection(bggUsername: String!): String
 	}
 
 	type Mutation {
-		createUser(email: String!, fullname: String, password: String!): User
+		createUser(email: String!, password: String!): User
 		login(email: String!, password: String!): AuthData!
 		addUserBoardGame(_id: String!): User
 		createBoardGame(boardGame: BoardGameCreateInput): BoardGame
 		updateBoardGame(boardGame: BoardGameUpdateInput): BoardGame
+
 	}
 `
 

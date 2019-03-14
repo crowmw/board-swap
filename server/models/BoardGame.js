@@ -1,5 +1,4 @@
 const mongoose = require('mongoose')
-const validator = require('validator')
 const mongodbErrorHandler = require('mongoose-mongodb-errors')
 
 const { Schema } = mongoose
@@ -15,8 +14,12 @@ const boardGameSchema = new Schema({
   originalName: String,
   year: Number,
   designer: String,
-  artist: String,
+  minPlayers: Number,
+  maxPlayers: Number,
+  playingTime: Number,
+  age: Number,
   thumbnail: String,
+  image: String,
   bggId: String,
   category: [
     { type: Schema.Types.ObjectId, ref: 'Category' }
