@@ -1,9 +1,14 @@
 const axios = require('axios')
 const xml2js = require('xml-js').xml2js
 
+const User = require('../models/User')
+const BoardGame = require('../models/BoardGame')
+
+const fetchBoardGameByBggId = require('../controllers/boardGameController')
+
 const bggUri = `http://www.boardgamegeek.com/xmlapi/`
 
-module.exports = {
+const BGGService = {
   fetchBggBoardGame: async (boardGames) => {
     let bggBoardGamesUri = ''
     if (typeof boardGames === 'string') {
@@ -11,12 +16,13 @@ module.exports = {
     } else {
       bggBoardGamesUri = `${bggUri}/boardgame/${boardGames.join(',')}`
     }
-
+    console.log(bggBoardGamesUri)
     const result = await axios.get(bggBoardGamesUri)
     if (!result || result.status !== 200) throw new Error('Cannot fetch boardGames from bgg')
 
     const jsResult = xml2js(result.data, { compact: true })
 
+    console.log(JSON.stringify(jsResult.boardGames))
     const boardGame = {
       bggId: jsResult.boardgames.boardgame._attributes.objectid,
       year: jsResult.boardgames.boardgame.yearpublished._text,
@@ -47,6 +53,36 @@ module.exports = {
       status: boardGame.status._attributes
     }))
 
-    return JSON.stringify(userBoardGamesResult)
+    return userBoardGamesResult
+  },
+  importBggUserBoardGames: async (userId, bggUsername) => {
+    const user = await User.findOne({ _id: userId })
+    if (!user) throw new Error('User does not exists')
+
+    //pobranie ustanionego bggUsername
+    const bggCollection = await BGGService.fetchBggUserCollection(bggUsername)
+    if (bggCollection.length === 0) throw new Error('There is no games in BGG collection')
+
+    const bggCollectionIds = bggCollection.map(bg => bg.bggId)
+    const existedBGs = await BoardGame.find({ bggId: { $in: bggCollectionIds } })
+
+    const notExistedBG = bggCollectionIds.filter(id => !existedBGs.map(existedBG => existedBG.bggId).includes(id))
+
+    console.log('NOT_EXISTED_BG', notExistedBG)
+    const boardGames = await BGGService.fetchBggBoardGame(notExistedBG)
+    console.log('RESULT', boardGames)
+    // for (let boardGame of bggCollection) {
+    //   const bgExists = await fetchBoardGameByBggId(boardGame.bggId)
+    //   if (!bgExists) {
+    //     const bggBoardGame = await fetchBggBoardGame(boardGame.bggId)
+    //     const newBg = new BoardGame({
+    //       name: boardGame.originalName,
+    //       bggId: boardGame.bggId
+    //     })
+    //   }
+    // }
+
   }
 }
+
+module.exports = BGGService

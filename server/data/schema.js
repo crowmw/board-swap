@@ -16,6 +16,11 @@ const typeDefs = `
 		email: String
 		username: String
 		bggUsername: String
+		role: String
+		verified: String
+		city: String
+		lat: Float
+		long: Float
 		boardGames: [BoardGame]
 		boardGamesWanted: [BoardGame]
 		boardGamesUnwanted: [BoardGame]
@@ -60,6 +65,22 @@ const typeDefs = `
 		userId: ID!
 		token: String!
 		tokenExpiration: Int!
+		role: String!
+	}
+	type BGGCollectionBoardGameStatus{
+		own: Boolean
+		preowned: Boolean
+		fortrade: Boolean
+		want: Boolean
+		wanttoplay: Boolean
+		wanttobuy: Boolean
+		whishlist: Boolean
+		preordered: Boolean
+	}
+	type BGGCollectionBoardGame {
+		bggId: ID!
+		originalName: String!
+		status: BGGCollectionBoardGameStatus
 	}
 
 	input BoardGameCreateInput {
@@ -92,7 +113,7 @@ const typeDefs = `
 	}
 
 	type Query {
-		user: User
+		user(userId: String!): User
 		boardGame(_id: ID!): BoardGame
 		boardGames(find: String, skip: Int, first: Int, orderBy: BoardGameOrderByEnum): [BoardGame]!
 		category(_id: ID!): Category
@@ -100,7 +121,7 @@ const typeDefs = `
 		userBoardGame(_id: ID!): UserBoardGame
 		userBoardGames: [UserBoardGame]!
 		bggBoardGame(bggId: String!): BoardGame
-		bggUserCollection(bggUsername: String!): String
+		bggUserCollection(bggUsername: String!): [BGGCollectionBoardGame]
 	}
 
 	type Mutation {
@@ -109,7 +130,7 @@ const typeDefs = `
 		addUserBoardGame(_id: String!): User
 		createBoardGame(boardGame: BoardGameCreateInput): BoardGame
 		updateBoardGame(boardGame: BoardGameUpdateInput): BoardGame
-
+		importBggUserBoardGames(bggUsername: String!): String
 	}
 `
 

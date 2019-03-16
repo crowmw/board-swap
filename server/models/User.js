@@ -18,11 +18,10 @@ const userSchema = new Schema({
 	role: { type: String, enum: ['user', 'moderator', 'admin'] },
 	username: String,
 	bggUsername: String,
-	github: {
-		id: String,
-		name: String,
-		email: String
-	},
+	verified: Boolean,
+	city: String,
+	lat: String,
+	long: String,
 	boardGames: [{
 		type: Schema.Types.ObjectId, ref: 'BoardGame'
 	}],

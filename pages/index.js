@@ -1,20 +1,17 @@
 import React from 'react'
 import Link from 'next/link'
 
-import withData from '../lib/withData'
-import checkLoggedIn from '../lib/checkLoggedIn'
+import { connect } from 'react-redux'
+import initialize from '../lib/initialize'
 
 class Index extends React.Component {
-  static async getInitialProps(context, apolloClient) {
-    const { loggedInUser } = await checkLoggedIn(context, apolloClient)
-
-    return {
-      user: loggedInUser.user
-    }
+  static async getInitialProps(ctx) {
+    initialize(ctx)
   }
 
   render() {
     const { user } = this.props
+    console.log(this.props)
     if (user) {
       return (
         <div>
@@ -49,4 +46,4 @@ class Index extends React.Component {
   }
 }
 
-export default withData(Index)
+export default connect(state => state)(Index)

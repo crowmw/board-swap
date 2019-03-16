@@ -12,12 +12,12 @@ module.exports = {
       if (!isEqual) throw new Error('Password is incorrect!')
 
       const token = jwt.sign(
-        { userId: user._id, email: user.email },
+        { userId: user._id, email: user.email, role: user.role },
         process.env.JWT_SECRET || 'secretkey',
         { expiresIn: '999h' }
       )
 
-      return { userId: user._id.toString(), token: token, tokenExpiration: 999 }
+      return { userId: user._id.toString(), token: token, tokenExpiration: 999, role: user.role }
     } catch (err) {
       throw err
     }
@@ -36,7 +36,7 @@ module.exports = {
 
       const result = await user.save()
 
-      return { ...result._doc, password: null, _id: result._id }
+      return result
     } catch (err) {
       throw err
     }

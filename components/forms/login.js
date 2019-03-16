@@ -1,45 +1,25 @@
-import { graphql } from 'react-apollo'
-import gql from 'graphql-tag'
+import React, { Component } from 'react'
+import { connect } from 'react-redux'
+import initialize from '../../lib/initialize';
+import { bindActionCreators } from 'redux';
+import actions from '../../redux/actions/actions';
 
-class login extends React.Component {
+class login extends Component {
+	static getInitialProps(ctx) {
+		initialize(ctx)
+	}
+
 	state = {
 		email: null,
 		password: null,
 		error: null
 	}
 
-	onFormSubmit = e => {
+	onFormSubmit = async e => {
 		e.preventDefault()
-		let { email, password } = this.state
-
-		// Check non null email && password
-		if (typeof email === 'string' && typeof password === 'string') {
-			// trim fields
-			email = email.trim()
-			password = password.trim()
-
-			// Check for email && password length
-			if (email.length > 0 && password.length > 0) {
-				this.props
-					.mutate({
-						variables: {
-							email,
-							password
-						}
-					})
-					.then(() => {
-						this.setState({ error: null })
-						window.location = '/'
-					})
-					.catch(({ graphQLErrors: err }) =>
-						this.setState({ error: err[0].message })
-					)
-			} else {
-				this.setState({ error: "Email & Password Field shouldn't be empty" })
-			}
-		} else {
-			this.setState({ error: 'Email & Password Field Required!' })
-		}
+		const { email, password } = this.state
+		console.log(this.props)
+		this.props.authenticate({ email, password })
 	}
 
 	render() {
@@ -111,11 +91,4 @@ class login extends React.Component {
 	}
 }
 
-const mutator = gql`
-	mutation login($email: String!, $password: String!) {
-		login(email: $email, password: $password) {
-			email
-		}
-	}
-`
-export default graphql(mutator)(login)
+export default connect(state => state, actions)(login)

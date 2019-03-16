@@ -4,12 +4,13 @@ const boardGameController = require('../controllers/boardGameController')
 const userBoardGameController = require('../controllers/userBoardGameController')
 const categoryController = require('../controllers/categoryController')
 const authenticated = require('../utils/graphqlUtils').authenticated
+const isAdmin = require('../utils/graphqlUtils').isAdmin
 
 const bggService = require('../services/bggService')
 
 module.exports = {
 	Query: {
-		user: authenticated((root, args, context) => userController.fetchUser(context.userId)),
+		user: isAdmin((root, { userId }) => userController.fetchUser(userId)),
 		boardGame: (root, { _id }) => boardGameController.fetchBoardGame(_id),
 		boardGames: (root, { find, skip, first, orderBy }) => boardGameController.fetchBoardGames({ find, skip, first, orderBy }),
 		category: (root, { _id }) => categoryController.fetchCategory(_id),
@@ -25,5 +26,6 @@ module.exports = {
 		addUserBoardGame: authenticated((root, { _id }, { userId }) => userController.putUserBoardGame(userId, _id)),
 		createBoardGame: (root, { boardGame }) => boardGameController.createBoardGame(boardGame),
 		updateBoardGame: (root, { boardGame }) => boardGameController.updateBoardGame(boardGame),
+		importBggUserBoardGames: authenticated((root, { bggUsername }, { userId }) => bggService.importBggUserBoardGames(userId, bggUsername))
 	}
 }

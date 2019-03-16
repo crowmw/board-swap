@@ -1,6 +1,7 @@
 const express = require('express')
 const mongoose = require('mongoose')
 const bodyParser = require('body-parser')
+const cookieParser = require('cookie-parser')
 const { graphqlExpress, graphiqlExpress } = require('apollo-server-express')
 const next = require('next')
 const authMiddleware = require('./middlewares/authMiddleware')
@@ -26,6 +27,7 @@ const handle = app.getRequestHandler()
 
 app.prepare().then(() => {
   const server = express()
+  server.use(cookieParser());
 
   server.use(authMiddleware)
 
@@ -36,7 +38,8 @@ app.prepare().then(() => {
       schema,
       context: {
         isAuth: req.isAuth,
-        userId: req.userId
+        userId: req.userId,
+        role: req.role
       }
     })
     )

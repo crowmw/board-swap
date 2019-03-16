@@ -1,8 +1,7 @@
 import Link from 'next/link'
-import withData from '../lib/withData'
 import LoginForm from '../components/forms/login'
 
-export default withData(() => (
+export default () => (
   <div>
     <h1> Login To Continue! </h1>
     <Link href="/">
@@ -10,4 +9,4 @@ export default withData(() => (
     </Link>
     <LoginForm />
   </div>
-))
+)
