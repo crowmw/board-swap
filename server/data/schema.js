@@ -130,7 +130,7 @@ const typeDefs = `
 		addUserBoardGame(_id: String!): User
 		createBoardGame(boardGame: BoardGameCreateInput): BoardGame
 		updateBoardGame(boardGame: BoardGameUpdateInput): BoardGame
-		importBggUserBoardGames(bggUsername: String!): String
+		importBggUserBoardGames(bggUsername: String!): Boolean
 	}
 `
 

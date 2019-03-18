@@ -12,7 +12,6 @@ const categorySchema = new Schema({
     required: 'Please supply an category name'
   },
   description: String,
-  year: Number,
   boardGames: [{ type: Schema.Types.ObjectId, ref: 'BoardGame' }]
 },
   {

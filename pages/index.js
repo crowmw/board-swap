@@ -11,7 +11,6 @@ class Index extends React.Component {
 
   render() {
     const { user } = this.props
-    console.log(this.props)
     if (user) {
       return (
         <div>

@@ -11,7 +11,6 @@ module.exports = {
     return next(root, args, context, info)
   },
   isAdmin: next => (root, args, context, info) => {
-    console.log(context)
     if (context.role !== 'admin') {
       throw new Error('Access denied! You have no permissions.')
     }

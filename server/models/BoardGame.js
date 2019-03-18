@@ -9,9 +9,13 @@ const boardGameSchema = new Schema({
     type: String,
     unique: true,
     trim: true,
-    required: 'Please supply an board game name'
   },
-  originalName: String,
+  originalName: {
+    type: String,
+    unique: true,
+    trim: true,
+    required: 'Please supply an original board game name'
+  },
   year: Number,
   designer: String,
   minPlayers: Number,

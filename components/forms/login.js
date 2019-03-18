@@ -1,7 +1,6 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import initialize from '../../lib/initialize';
-import { bindActionCreators } from 'redux';
 import actions from '../../redux/actions/actions';
 
 class login extends Component {
@@ -18,7 +17,6 @@ class login extends Component {
 	onFormSubmit = async e => {
 		e.preventDefault()
 		const { email, password } = this.state
-		console.log(this.props)
 		this.props.authenticate({ email, password })
 	}
 

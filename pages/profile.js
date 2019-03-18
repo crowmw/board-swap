@@ -1,16 +1,8 @@
 import React from 'react'
 import Link from 'next/link'
 
-import checkLoggedIn from '../lib/checkLoggedIn'
-import withData from '../lib/withData'
 
 class Profile extends React.Component {
-  static async getInitialProps(context, apolloClient) {
-    const { loggedInUser } = await checkLoggedIn(context, apolloClient)
-
-    return { user: loggedInUser.profile }
-  }
-
   render() {
     const { user } = this.props
 
@@ -32,4 +24,4 @@ class Profile extends React.Component {
   }
 }
 
-export default withData(Profile)
+export default Profile
