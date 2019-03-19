@@ -2,8 +2,9 @@ import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import initialize from '../../lib/initialize';
 import actions from '../../redux/actions/actions';
+import selectors from '../../redux/selectors/selectors';
 
-class login extends Component {
+class SignInForm extends Component {
 	static getInitialProps(ctx) {
 		initialize(ctx)
 	}
@@ -11,20 +12,20 @@ class login extends Component {
 	state = {
 		email: null,
 		password: null,
-		error: null
 	}
 
 	onFormSubmit = async e => {
 		e.preventDefault()
 		const { email, password } = this.state
-		this.props.authenticate({ email, password })
+		this.props.signin({ email, password })
 	}
 
 	render() {
-		return [
+		const { props: { error, inProgress } } = this
+		return (
 			<form onSubmit={this.onFormSubmit} key="form">
 				<div>
-					<span className="error">{this.state.error}</span>
+					{error && <span className="error">{error}</span>}
 					<label> Email Address </label>
 					<input
 						type="email"
@@ -41,7 +42,8 @@ class login extends Component {
 					/>
 				</div>
 				<div>
-					<button type="submit"> Log In </button>
+					<button type="submit">Sign In</button>
+					{inProgress && <span>IN PROGRES...</span>}
 				</div>
 				<style jsx>
 					{`
@@ -80,13 +82,14 @@ class login extends Component {
 						}
 					`}
 				</style>
-			</form>,
-			<a key="btn" href="/auth/github">
-				{' '}
-				Auth With GitHub{' '}
-			</a>
-		]
+			</form>
+		)
 	}
 }
 
-export default connect(state => state, actions)(login)
+const mapStateToProps = state => ({
+	error: selectors.getSignInError(state),
+	inProgress: selectors.getSignInProgress(state)
+})
+
+export default connect(mapStateToProps, actions)(SignInForm)

@@ -1,21 +1,26 @@
 import React from 'react'
 import Link from 'next/link'
-
+import { connect } from 'react-redux'
+import initialize from '../lib/initialize'
+import selectors from '../redux/selectors/selectors'
 
 class Profile extends React.Component {
-  render() {
-    const { user } = this.props
+  static async getInitialProps(ctx) {
+    initialize(ctx)
+  }
 
-    if (user) {
+  render() {
+    const { signedIn } = this.props
+
+    if (signedIn) {
       return (
         <div>
           <Link href="/">
             <a>Home</a>
           </Link>
           <p>My Profile</p>
-          {user.github.id ? 'GitHub Connected' : 'GitHub Not Linked'}
-          <p> Fullname: {user.fullname || user.github.name}</p>
-          <p> Email: {user.email || user.github.email}</p>
+          <p> username: </p>
+          <p> Email: </p>
         </div>
       )
     }
@@ -24,4 +29,8 @@ class Profile extends React.Component {
   }
 }
 
-export default Profile
+const mapStateToProps = state => ({
+  signedIn: selectors.getIsSignedIn(state)
+})
+
+export default connect(mapStateToProps)(Profile)

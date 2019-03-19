@@ -1,12 +1,12 @@
 import Link from 'next/link'
-import SignupForm from '../components/forms/SignUpForm'
+import SignInForm from '../components/forms/SignInForm'
 
 export default () => (
   <div>
-    <h1> Create An Account! </h1>
+    <h1> Sign in To BOARD SWAP! </h1>
     <Link href="/">
       <a>Home</a>
     </Link>
-    <SignupForm />
+    <SignInForm />
   </div>
 )

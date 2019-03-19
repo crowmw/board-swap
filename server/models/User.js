@@ -19,6 +19,8 @@ const userSchema = new Schema({
 	username: String,
 	bggUsername: String,
 	verified: Boolean,
+	emailToken: String,
+	emailConfirmed: Boolean,
 	city: String,
 	lat: String,
 	long: String,

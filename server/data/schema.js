@@ -125,7 +125,7 @@ const typeDefs = `
 	}
 
 	type Mutation {
-		createUser(email: String!, password: String!): User
+		createUser(email: String!, password: String!, username: String): User
 		login(email: String!, password: String!): AuthData!
 		addUserBoardGame(_id: String!): User
 		createBoardGame(boardGame: BoardGameCreateInput): BoardGame

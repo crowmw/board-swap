@@ -22,19 +22,25 @@ module.exports = {
       throw err
     }
   },
-  createUser: async (email, password) => {
+  createUser: async (email, password, username) => {
     try {
       const existingUser = await User.findOne({ email: email })
       if (existingUser) throw new Error('Email address already taken.')
 
       const hashedPassword = await bcrypt.hash(password, 12)
+      const emailToken = await bcrypt.hash(email, 6)
       const user = new User({
-        email: email,
+        email,
         password: hashedPassword,
-        role: 'user'
+        username,
+        role: 'user',
+        emailToken,
+        emailConfirmed: false
       })
 
       const result = await user.save()
+
+      //SEND EMAIL CONFIRMATION WITH _ID AND EMAILTOKEN
 
       return result
     } catch (err) {

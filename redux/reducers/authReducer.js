@@ -1,23 +1,36 @@
-import { AUTHENTICATE, DEAUTHENTICATE } from '../types'
+import { SIGNED_IN, SIGN_OUT } from '../types'
 import { combineReducers } from 'redux';
 
 const initialState = {
-  token: null
+  token: null,
+  signedIn: false
 }
 
 const token = (state = initialState.token, { type, payload }) => {
   switch (type) {
-    case AUTHENTICATE:
+    case SIGNED_IN:
       return payload.token
-    case DEAUTHENTICATE:
+    case SIGN_OUT:
       return initialState.token
     default:
       return state
   }
 }
 
+const signedIn = (state = initialState.signedIn, { type, payload }) => {
+  switch (type) {
+    case SIGNED_IN:
+      return true
+    case SIGN_OUT:
+      return false
+    default:
+      return state
+  }
+}
+
 const authReducer = combineReducers({
-  token
+  token,
+  signedIn
 })
 
 export default authReducer
