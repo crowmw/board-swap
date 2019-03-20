@@ -28,9 +28,7 @@ const signedIn = (state = initialState.signedIn, { type, payload }) => {
   }
 }
 
-const authReducer = combineReducers({
+export default combineReducers({
   token,
   signedIn
 })
-
-export default authReducer

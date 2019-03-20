@@ -28,9 +28,7 @@ const signUpError = (state = initialState.signUpError, { type, payload }) => {
   }
 }
 
-const errorReducer = combineReducers({
+export default combineReducers({
   signInError,
   signUpError
 })
-
-export default errorReducer

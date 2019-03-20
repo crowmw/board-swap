@@ -106,9 +106,50 @@ export const signout = () => {
   }
 }
 
+export const verifyEmail = ({ username, token }) => async disaptch => {
+  try {
+    const body = {
+      query: `
+        mutation {
+          verifyEmail(username: "${username}", token: "${token}")
+        }
+      `
+    }
+
+    const result = await axios.post('http://localhost:3000/graphql', body)
+    if (!!result.data.errors) throw new Error(result.data.errors[0].message)
+    if (result && result.data.data) {
+    }
+  } catch (err) {
+    console.error(err)
+  }
+}
+
+export const resendEmailVerification = (userId) => async dispatch => {
+  try {
+    const body = {
+      query: `
+        mutation {
+          resendEmailVerification(userId: String!)
+        }
+      `
+    }
+
+    const result = await axios.post('http://localhost:3000/graphql', body)
+    if (!!result.data.errors) throw new Error(result.data.errors[0].message)
+
+    if (result && result.data.data) {
+
+    }
+  } catch (err) {
+    console.error(err)
+  }
+}
+
 export default {
   signin,
   signup,
   reauthenticate,
-  signout
+  signout,
+  verifyEmail
 }

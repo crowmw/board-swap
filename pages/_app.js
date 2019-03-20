@@ -3,7 +3,7 @@ import App, { Container } from 'next/app'
 import withRedux from 'next-redux-wrapper'
 import { initStore } from '../redux/index'
 
-export default withRedux(initStore, { debug: true })(
+export default withRedux(initStore, { debug: false })(
   class BoardSwap extends App {
     static async getInitialProps({ Component, ctx }) {
       return {

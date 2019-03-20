@@ -30,9 +30,7 @@ const signingUp = (state = initialState.signingUp, { type, payload }) => {
   }
 }
 
-const appStatesReducer = combineReducers({
+export default combineReducers({
   signingIn,
   signingUp
 })
-
-export default appStatesReducer

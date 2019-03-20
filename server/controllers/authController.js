@@ -1,4 +1,5 @@
 const User = require('../models/User')
+const emailService = require('../services/emailService')
 const jwt = require('jsonwebtoken')
 const bcrypt = require('bcryptjs')
 
@@ -28,7 +29,7 @@ module.exports = {
       if (existingUser) throw new Error('Email address already taken.')
 
       const hashedPassword = await bcrypt.hash(password, 12)
-      const emailToken = await bcrypt.hash(email, 6)
+      const emailToken = await bcrypt.hash(email, 12)
       const user = new User({
         email,
         password: hashedPassword,
@@ -38,13 +39,50 @@ module.exports = {
         emailConfirmed: false
       })
 
-      const result = await user.save()
+      await user.save()
 
       //SEND EMAIL CONFIRMATION WITH _ID AND EMAILTOKEN
+      emailService.sendEmailVerification({ to: email, token: emailToken, username })
 
-      return result
+      return true
     } catch (err) {
       throw err
+    }
+  },
+  verifyEmail: async (username, token) => {
+    try {
+      const user = await User.findOne({ username: username })
+      if (!user) throw new Error('User not exist')
+
+      if (user.emailToken !== token) throw new Error('Token is not equal to sended.')
+
+      const isEqual = await bcrypt.compare(user.email, token)
+
+      if (!isEqual) throw new Error('Invalid token')
+
+      user.emailConfirmed = true
+      user.emailToken = null
+      await user.save()
+      return true
+    } catch (err) {
+      throw err
+    }
+  },
+  resendEmailVerification: async (userId) => {
+    try {
+      const user = await User.findById(userId)
+      if (!user) throw new Error('User not exists')
+
+      const emailToken = await bcrypt.hash(email, 12)
+
+      user.emailToken = emailToken
+      await user.save()
+
+      emailService.sendEmailVerification({ to: user.email, token: emailToken, username: user.username })
+
+      return true
+    } catch (err) {
+
     }
   }
 }

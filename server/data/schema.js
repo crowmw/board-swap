@@ -127,6 +127,8 @@ const typeDefs = `
 	type Mutation {
 		createUser(email: String!, password: String!, username: String): User
 		login(email: String!, password: String!): AuthData!
+		verifyEmail(username: String!, token: String!): Boolean
+		resendEmailVerification(userId: String): Boolean
 		addUserBoardGame(_id: String!): User
 		createBoardGame(boardGame: BoardGameCreateInput): BoardGame
 		updateBoardGame(boardGame: BoardGameUpdateInput): BoardGame
