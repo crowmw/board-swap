@@ -3,7 +3,8 @@ import { combineReducers } from 'redux';
 
 const initialState = {
   signInError: null,
-  signUpError: null
+  signUpError: null,
+  emailConfirmError: null
 }
 
 const signInError = (state = initialState.signInError, { type, payload }) => {
@@ -28,7 +29,19 @@ const signUpError = (state = initialState.signUpError, { type, payload }) => {
   }
 }
 
+const emailConfirmError = (state = initialState.emailConfirmError, { type, payload }) => {
+  switch (type) {
+    case types.EMAIL_CONFIRMED_ERROR:
+      return payload.error
+    case types.EMAIL_CONFIRMED:
+      return initialState.emailConfirmError
+    default:
+      return state
+  }
+}
+
 export default combineReducers({
   signInError,
-  signUpError
+  signUpError,
+  emailConfirmError
 })

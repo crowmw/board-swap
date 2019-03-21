@@ -1,14 +1,9 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
-import initialize from '../../lib/initialize';
 import actions from '../../redux/actions/actions';
 import selectors from '../../redux/selectors/selectors';
 
 class SignInForm extends Component {
-	static getInitialProps(ctx) {
-		initialize(ctx)
-	}
-
 	state = {
 		email: null,
 		password: null,

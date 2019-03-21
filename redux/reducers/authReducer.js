@@ -3,7 +3,8 @@ import { combineReducers } from 'redux';
 
 const initialState = {
   token: null,
-  signedIn: false
+  signedIn: false,
+  emailConfirmed: false
 }
 
 const token = (state = initialState.token, { type, payload }) => {
@@ -12,6 +13,17 @@ const token = (state = initialState.token, { type, payload }) => {
       return payload.token
     case SIGN_OUT:
       return initialState.token
+    default:
+      return state
+  }
+}
+
+const emailConfirmed = (state = initialState.emailConfirmed, { type, payload }) => {
+  switch (type) {
+    case SIGNED_IN:
+      return payload.profile.emailConfirmed
+    case SIGN_OUT:
+      return initialState.emailConfirmed
     default:
       return state
   }
@@ -30,5 +42,6 @@ const signedIn = (state = initialState.signedIn, { type, payload }) => {
 
 export default combineReducers({
   token,
-  signedIn
+  signedIn,
+  emailConfirmed
 })

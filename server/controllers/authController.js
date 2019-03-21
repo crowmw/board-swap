@@ -18,7 +18,7 @@ module.exports = {
         { expiresIn: '999h' }
       )
 
-      return { userId: user._id.toString(), token: token, tokenExpiration: 999, role: user.role }
+      return { userId: user._id.toString(), token: token, tokenExpiration: 999, role: user.role, profile: user }
     } catch (err) {
       throw err
     }
@@ -44,12 +44,12 @@ module.exports = {
       //SEND EMAIL CONFIRMATION WITH _ID AND EMAILTOKEN
       emailService.sendEmailVerification({ to: email, token: emailToken, username })
 
-      return true
+      return user
     } catch (err) {
       throw err
     }
   },
-  verifyEmail: async (username, token) => {
+  emailConfirm: async (username, token) => {
     try {
       const user = await User.findOne({ username: username })
       if (!user) throw new Error('User not exist')

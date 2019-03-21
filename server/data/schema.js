@@ -18,6 +18,7 @@ const typeDefs = `
 		bggUsername: String
 		role: String
 		verified: String
+		emailConfirmed: Boolean
 		city: String
 		lat: Float
 		long: Float
@@ -66,6 +67,7 @@ const typeDefs = `
 		token: String!
 		tokenExpiration: Int!
 		role: String!
+		profile: User
 	}
 	type BGGCollectionBoardGameStatus{
 		own: Boolean
@@ -127,7 +129,7 @@ const typeDefs = `
 	type Mutation {
 		createUser(email: String!, password: String!, username: String): User
 		login(email: String!, password: String!): AuthData!
-		verifyEmail(username: String!, token: String!): Boolean
+		emailConfirm(username: String!, token: String!): Boolean
 		resendEmailVerification(userId: String): Boolean
 		addUserBoardGame(_id: String!): User
 		createBoardGame(boardGame: BoardGameCreateInput): BoardGame

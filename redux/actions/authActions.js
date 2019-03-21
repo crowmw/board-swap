@@ -1,6 +1,6 @@
 import Router from 'next/router'
 import axios from 'axios'
-import { SIGNED_IN, SIGN_OUT, SIGN_IN_ERROR, SIGNING_IN, SIGNED_UP, SIGN_UP_ERROR, SIGNING_UP } from '../types'
+import { SIGNED_IN, SIGN_OUT, SIGN_IN_ERROR, SIGNING_IN, SIGNED_UP, SIGN_UP_ERROR, SIGNING_UP, EMAIL_CONFIRMED_ERROR, EMAIL_CONFIRMED } from '../types'
 import { setCookie, removeCookie } from '../../lib/cookie'
 
 //get token from the api and stores it in the redux store and in cookie then return to main page
@@ -17,6 +17,15 @@ export const signin = ({ email, password }, type) => async dispatch => {
             token
             tokenExpiration
             role
+            profile {
+                username
+                email
+                emailConfirmed
+                verified
+                city
+                role
+                bggUsername
+            }
           }
         }
       `
@@ -26,15 +35,20 @@ export const signin = ({ email, password }, type) => async dispatch => {
     if (result && result.data.data) {
       const data = result.data.data.login
 
+      if (!data.profile.emailConfirmed) {
+        Router.push('/check-email')
+        return
+      }
+
       setCookie('token', data.token)
 
-      Router.push('/')
 
       dispatch({
         type: SIGNED_IN,
         payload: { ...data }
       })
 
+      Router.push('/')
     }
   } catch (err) {
     dispatch({
@@ -69,10 +83,10 @@ export const signup = ({ email, password, username }) => async dispatch => {
         if (!!result.data.errors) throw new Error(result.data.errors[0].message)
 
         if (result && result.data.data) {
-          Router.push('/')
           dispatch({
             type: SIGNED_UP,
           })
+          Router.push('/check-email')
         }
 
       } else {
@@ -106,12 +120,12 @@ export const signout = () => {
   }
 }
 
-export const verifyEmail = ({ username, token }) => async disaptch => {
+export const emailConfirm = ({ username, token }) => async disaptch => {
   try {
     const body = {
       query: `
         mutation {
-          verifyEmail(username: "${username}", token: "${token}")
+          emailConfirm(username: "${username}", token: "${token}")
         }
       `
     }
@@ -119,9 +133,10 @@ export const verifyEmail = ({ username, token }) => async disaptch => {
     const result = await axios.post('http://localhost:3000/graphql', body)
     if (!!result.data.errors) throw new Error(result.data.errors[0].message)
     if (result && result.data.data) {
+      disaptch({ type: EMAIL_CONFIRMED })
     }
   } catch (err) {
-    console.error(err)
+    disaptch({ type: EMAIL_CONFIRMED_ERROR, payload: { error: err.message } })
   }
 }
 
@@ -137,10 +152,6 @@ export const resendEmailVerification = (userId) => async dispatch => {
 
     const result = await axios.post('http://localhost:3000/graphql', body)
     if (!!result.data.errors) throw new Error(result.data.errors[0].message)
-
-    if (result && result.data.data) {
-
-    }
   } catch (err) {
     console.error(err)
   }
@@ -151,5 +162,5 @@ export default {
   signup,
   reauthenticate,
   signout,
-  verifyEmail
+  emailConfirm
 }

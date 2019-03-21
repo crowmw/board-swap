@@ -9,7 +9,8 @@ import actions from '../redux/actions/actions'
 
 class Index extends React.Component {
   static async getInitialProps(ctx) {
-    initialize(ctx)
+    console.log(ctx.pathname)
+    // initialize(ctx)
   }
 
   signoutHandler = () => {
@@ -40,7 +41,10 @@ class Index extends React.Component {
         </Link>{' '}
         or{' '}
         <Link href="/signup">
-          <a>Signup</a>
+          <a>Sign Up</a>
+        </Link>{' '}
+        <Link href="/profile">
+          <a>Profile</a>
         </Link>{' '}
         to view hidden resources
       </div>

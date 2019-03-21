@@ -5,7 +5,7 @@ import actions from '../redux/actions/actions'
 
 class EmailVerification extends Component {
   static async getInitialProps({ query: { username, t }, store }) {
-    const result = await store.dispatch(actions.verifyEmail({ username, token: t }))
+    const result = await store.dispatch(actions.emailConfirm({ username, token: t }))
   }
 
   handleResend = () => {

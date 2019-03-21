@@ -23,7 +23,7 @@ module.exports = {
 	Mutation: {
 		login: (root, { email, password }) => authController.login(email, password),
 		createUser: (root, { email, password, username }) => authController.createUser(email, password, username),
-		verifyEmail: (root, { username, token }) => authController.verifyEmail(username, token),
+		emailConfirm: (root, { username, token }) => authController.emailConfirm(username, token),
 		resendEmailVerification: (root, { userId }) => authController.resendEmailVerification(userId),
 		addUserBoardGame: authenticated((root, { _id }, { userId }) => userController.putUserBoardGame(userId, _id)),
 		createBoardGame: (root, { boardGame }) => boardGameController.createBoardGame(boardGame),
