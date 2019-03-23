@@ -11,7 +11,6 @@ class Profile extends React.Component {
   }
 
   render() {
-    console.log('RENDER!!!!')
     return (
       <div>
         <Link href="/">

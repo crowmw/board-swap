@@ -8,11 +8,6 @@ import selector from '../redux/selectors/selectors'
 import actions from '../redux/actions/actions'
 
 class Index extends React.Component {
-  static async getInitialProps(ctx) {
-    console.log(ctx.pathname)
-    // initialize(ctx)
-  }
-
   signoutHandler = () => {
     this.props.signout()
   }

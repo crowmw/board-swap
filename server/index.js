@@ -31,6 +31,8 @@ app.prepare().then(() => {
 
   server.use(authMiddleware)
 
+  server.use(bodyParser.json())
+
   server.use(
     '/graphql',
     bodyParser.json(),

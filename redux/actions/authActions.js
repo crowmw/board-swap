@@ -2,15 +2,15 @@ import Router from 'next/router'
 import axios from 'axios'
 import { SIGNED_IN, SIGN_OUT, SIGN_IN_ERROR, SIGNING_IN, SIGNED_UP, SIGN_UP_ERROR, SIGNING_UP, EMAIL_CONFIRMED_ERROR, EMAIL_CONFIRMED } from '../types'
 import { setCookie, removeCookie } from '../../lib/cookie'
+import api from '../../lib/api';
 
 //get token from the api and stores it in the redux store and in cookie then return to main page
-export const signin = ({ email, password }, type) => async dispatch => {
+export const signin = ({ email, password }) => async dispatch => {
   try {
     dispatch({
       type: SIGNING_IN
     })
-    const body = {
-      query: `
+    const body = `
         mutation {
           login(email: "${email}", password: "${password}") {
             userId
@@ -29,23 +29,19 @@ export const signin = ({ email, password }, type) => async dispatch => {
           }
         }
       `
-    }
-    const result = await axios.post('http://localhost:3000/graphql', body)
-    if (!!result.data.errors) throw new Error(result.data.errors[0].message)
-    if (result && result.data.data) {
-      const data = result.data.data.login
-
-      if (!data.profile.emailConfirmed) {
+    const result = await api.post('/api/signin', { email, password })
+    if (result) {
+      if (!result.profile.emailConfirmed) {
         Router.push('/check-email')
         return
       }
 
-      setCookie('token', data.token)
+      setCookie('token', result.token)
 
 
       dispatch({
         type: SIGNED_IN,
-        payload: { ...data }
+        payload: { ...result }
       })
 
       Router.push('/')
@@ -69,20 +65,16 @@ export const signup = ({ email, password, username }) => async dispatch => {
 
       // Check for email && password length
       if (email.length > 0 && password.length > 0) {
-        const body = {
-          query: `
+        const body = `
           mutation {
             createUser(email: "${email}", password: "${password}", username: "${username}") {
               _id
             }
           }
         `
-        }
 
-        const result = await axios.post('http://localhost:3000/graphql', body)
-        if (!!result.data.errors) throw new Error(result.data.errors[0].message)
-
-        if (result && result.data.data) {
+        const result = await api.graphql(body)
+        if (result) {
           dispatch({
             type: SIGNED_UP,
           })
@@ -122,17 +114,14 @@ export const signout = () => {
 
 export const emailConfirm = ({ username, token }) => async disaptch => {
   try {
-    const body = {
-      query: `
+    const body = `
         mutation {
           emailConfirm(username: "${username}", token: "${token}")
         }
       `
-    }
 
-    const result = await axios.post('http://localhost:3000/graphql', body)
-    if (!!result.data.errors) throw new Error(result.data.errors[0].message)
-    if (result && result.data.data) {
+    const result = await api.graphql(body)
+    if (result) {
       disaptch({ type: EMAIL_CONFIRMED })
     }
   } catch (err) {
@@ -142,16 +131,13 @@ export const emailConfirm = ({ username, token }) => async disaptch => {
 
 export const resendEmailVerification = (userId) => async dispatch => {
   try {
-    const body = {
-      query: `
+    const body = `
         mutation {
           resendEmailVerification(userId: String!)
         }
       `
-    }
 
-    const result = await axios.post('http://localhost:3000/graphql', body)
-    if (!!result.data.errors) throw new Error(result.data.errors[0].message)
+    const result = await api.graphql(body)
   } catch (err) {
     console.error(err)
   }
