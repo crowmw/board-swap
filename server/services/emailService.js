@@ -17,8 +17,38 @@ module.exports = {
     const mailOptions = {
       from: process.env.MAILER_ADDRESS,
       to,
-      subject: 'Board Swap email verification link',
+      subject: 'Board Swap - email verification link',
       html: `<p>Click <a href="${confirmEmailLink}">HERE</a> to verify Your email address on Board Swap</p>`
+    }
+
+    try {
+      await transporter.sendMail(mailOptions)
+    } catch (err) {
+      throw new Error(err.message)
+    }
+  },
+  sendForgottenPasswordEmail: async ({ to, username, token }) => {
+    const changePasswordLink = `${process.env.APP_URL || `http://localhost:3000/`}forgot-password-change?t=${token}`
+
+    const mailOptions = {
+      from: process.env.MAILER_ADDRESS,
+      to,
+      subject: 'Board Swap - forgotten password change',
+      html: `<p>Click <a href="${changePasswordLink}">HERE</a> to change Yout forgotten password on Board Swap</p>`
+    }
+
+    try {
+      await transporter.sendMail(mailOptions)
+    } catch (err) {
+      throw new Error(err.message)
+    }
+  },
+  passwordChange: async ({ to, username }) => {
+    const mailOptions = {
+      from: process.env.MAILER_ADDRESS,
+      to,
+      subject: 'Board Swap - password has been changed',
+      html: `<p>${username}! Your password on Board Swap has been changed!</p>`
     }
 
     try {

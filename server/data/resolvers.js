@@ -21,10 +21,6 @@ module.exports = {
 		bggUserCollection: (root, { bggUsername }) => bggService.fetchBggUserCollection(bggUsername)
 	},
 	Mutation: {
-		login: (root, { email, password }) => authController.login(email, password),
-		createUser: (root, { email, password, username }) => authController.createUser(email, password, username),
-		emailConfirm: (root, { username, token }) => authController.emailConfirm(username, token),
-		resendEmailVerification: (root, { userId }) => authController.resendEmailVerification(userId),
 		addUserBoardGame: authenticated((root, { _id }, { userId }) => userController.putUserBoardGame(userId, _id)),
 		createBoardGame: (root, { boardGame }) => boardGameController.createBoardGame(boardGame),
 		updateBoardGame: (root, { boardGame }) => boardGameController.updateBoardGame(boardGame),

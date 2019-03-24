@@ -7,6 +7,7 @@ module.exports = {
   signIn: async (email, password) => {
     try {
       const user = await User.findOne({ email: email })
+      console.log('UUUUSSSSEEEERRRR:', email, password, user)
       if (!user) throw new Error('User does not exists!')
 
       const isEqual = await bcrypt.compare(password, user.password)
@@ -23,7 +24,7 @@ module.exports = {
       throw err
     }
   },
-  createUser: async (email, password, username) => {
+  signUp: async (email, password, username) => {
     try {
       const existingUser = await User.findOne({ email: email })
       if (existingUser) throw new Error('Email address already taken.')
@@ -86,7 +87,45 @@ module.exports = {
 
       return true
     } catch (err) {
+      throw new Error(err.message)
+    }
+  },
+  forgotPassword: async (email) => {
+    try {
+      const user = await User.findOne({ email: email })
+      if (!user) throw new Error('User not exists')
 
+      const forgotPasswordToken = await bcrypt.hash(email, 12)
+
+      user.forgotPasswordToken = forgotPasswordToken
+      await user.save()
+
+      emailService.sendForgottenPasswordEmail({ to: user.email, token: forgotPasswordToken, username: user.username })
+
+      return true
+    } catch (err) {
+      throw new Error(err.message)
+    }
+  },
+  changeForgottenPassword: async (password, token) => {
+    try {
+      if (!token) throw new Error('Token must be provided')
+      if (!password) throw new Error('Password must be provided')
+
+      const user = await User.findOne({ forgotPasswordToken: token })
+      console.log('USER FOUND!:', user)
+      if (!user) throw new Error('Cannot find user')
+
+      const hashedPassword = await bcrypt.hash(password, 12)
+
+      user.password = hashedPassword
+      user.forgotPasswordToken = null
+
+      await user.save()
+
+      emailService.passwordChange({ to: user.email, username: user.username })
+    } catch (err) {
+      throw new Error(err.message)
     }
   }
 }

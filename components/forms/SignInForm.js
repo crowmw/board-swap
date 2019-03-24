@@ -9,10 +9,15 @@ class SignInForm extends Component {
 		password: null,
 	}
 
-	onFormSubmit = async e => {
+	onFormSubmit = e => {
 		e.preventDefault()
 		const { email, password } = this.state
-		this.props.signin({ email, password })
+		this.props.signIn({ email, password })
+	}
+
+	forgotPasswordHandler = (e) => {
+		e.preventDefault()
+		this.props.sendForgottenPasswordEmail(this.state.email)
 	}
 
 	render() {
@@ -39,6 +44,9 @@ class SignInForm extends Component {
 				<div>
 					<button type="submit">Sign In</button>
 					{inProgress && <span>IN PROGRES...</span>}
+				</div>
+				<div>
+					<button onClick={(e) => this.forgotPasswordHandler(e)}>Zapomniałem hasła</button>
 				</div>
 				<style jsx>
 					{`

@@ -5,31 +5,13 @@ import { setCookie, removeCookie } from '../../lib/cookie'
 import api from '../../lib/api';
 
 //get token from the api and stores it in the redux store and in cookie then return to main page
-export const signin = ({ email, password }) => async dispatch => {
+const signIn = ({ email, password }) => async dispatch => {
   try {
     dispatch({
       type: SIGNING_IN
     })
-    const body = `
-        mutation {
-          login(email: "${email}", password: "${password}") {
-            userId
-            token
-            tokenExpiration
-            role
-            profile {
-                username
-                email
-                emailConfirmed
-                verified
-                city
-                role
-                bggUsername
-            }
-          }
-        }
-      `
-    const result = await api.post('/api/signin', { email, password })
+
+    const result = await api.post('api/signin', { email, password })
     if (result) {
       if (!result.profile.emailConfirmed) {
         Router.push('/check-email')
@@ -54,7 +36,7 @@ export const signin = ({ email, password }) => async dispatch => {
   }
 }
 
-export const signup = ({ email, password, username }) => async dispatch => {
+const signUp = ({ email, password, username }) => async dispatch => {
   try {
     dispatch({ type: SIGNING_UP })
     if (typeof email === 'string' && typeof password === 'string') {
@@ -65,15 +47,7 @@ export const signup = ({ email, password, username }) => async dispatch => {
 
       // Check for email && password length
       if (email.length > 0 && password.length > 0) {
-        const body = `
-          mutation {
-            createUser(email: "${email}", password: "${password}", username: "${username}") {
-              _id
-            }
-          }
-        `
-
-        const result = await api.graphql(body)
+        const result = await api.post('api/signup', { email, password, username })
         if (result) {
           dispatch({
             type: SIGNED_UP,
@@ -97,14 +71,14 @@ export const signup = ({ email, password, username }) => async dispatch => {
 }
 
 //set token to cookie and state again
-export const reauthenticate = (token) => {
+const reauthenticate = (token) => {
   return dispatch => {
     dispatch({ type: SIGNED_IN, payload: { token } })
   }
 }
 
 //remove token from cookie and from state then return to main page
-export const signout = () => {
+const signout = () => {
   return dispatch => {
     removeCookie('token')
     dispatch({ type: SIGN_OUT })
@@ -112,15 +86,9 @@ export const signout = () => {
   }
 }
 
-export const emailConfirm = ({ username, token }) => async disaptch => {
+const emailConfirm = ({ username, token }) => async disaptch => {
   try {
-    const body = `
-        mutation {
-          emailConfirm(username: "${username}", token: "${token}")
-        }
-      `
-
-    const result = await api.graphql(body)
+    const result = await api.post('api/email-confirm', { username, token })
     if (result) {
       disaptch({ type: EMAIL_CONFIRMED })
     }
@@ -129,24 +97,39 @@ export const emailConfirm = ({ username, token }) => async disaptch => {
   }
 }
 
-export const resendEmailVerification = (userId) => async dispatch => {
+const resendEmailVerification = (userId) => async () => {
   try {
-    const body = `
-        mutation {
-          resendEmailVerification(userId: String!)
-        }
-      `
+    await api.post('api/email-resend', { userId })
+  } catch (err) {
+    console.error(err)
+  }
+}
 
-    const result = await api.graphql(body)
+const sendForgottenPasswordEmail = (email) => async () => {
+  try {
+    await api.post('/api/forgot-password', { email })
+  } catch (err) {
+    console.error(err)
+  }
+}
+
+const changeForgottenPassword = ({ password, token }) => async () => {
+  try {
+    console.log('ACTION_PROPS', password, token)
+    await api.post('/api/change-forgotten-password', { password, token })
+    Router.push('/signin')
   } catch (err) {
     console.error(err)
   }
 }
 
 export default {
-  signin,
-  signup,
+  signIn,
+  signUp,
   reauthenticate,
   signout,
-  emailConfirm
+  emailConfirm,
+  resendEmailVerification,
+  sendForgottenPasswordEmail,
+  changeForgottenPassword
 }

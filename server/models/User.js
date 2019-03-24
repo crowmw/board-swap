@@ -21,6 +21,7 @@ const userSchema = new Schema({
 	verified: { type: Boolean, default: false },
 	emailToken: { type: String, default: null },
 	emailConfirmed: { type: Boolean, default: false },
+	forgotPasswordToken: { type: String, default: null },
 	city: { type: String, default: null },
 	lat: { type: String, default: null },
 	long: { type: String, default: null },

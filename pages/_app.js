@@ -7,12 +7,10 @@ export default withRedux(initStore, { debug: false })(
   class BoardSwap extends App {
     static async getInitialProps({ Component, ctx }) {
       return {
-        pageProps: {
-          ...withRedux(Component.getInitialProps
+        pageProps:
+          Component.getInitialProps
             ? await Component.getInitialProps(ctx)
             : {}
-          )
-        }
       }
     }
 
