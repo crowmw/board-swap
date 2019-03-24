@@ -3,8 +3,7 @@ const userController = require('../controllers/userController')
 const boardGameController = require('../controllers/boardGameController')
 const userBoardGameController = require('../controllers/userBoardGameController')
 const categoryController = require('../controllers/categoryController')
-const authenticated = require('../utils/graphqlUtils').authenticated
-const isAdmin = require('../utils/graphqlUtils').isAdmin
+const { authenticated, isAdmin } = require('../utils/graphqlUtils')
 
 const bggService = require('../services/bggService')
 

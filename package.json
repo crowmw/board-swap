@@ -38,9 +38,15 @@
 		"react-redux": "^6.0.1",
 		"redux": "^4.0.1",
 		"redux-thunk": "^2.3.0",
+		"semantic-ui-css": "^2.4.1",
+		"semantic-ui-react": "^0.86.0",
 		"xml-js": "^1.6.11"
 	},
 	"devDependencies": {
-		"nodemon": "^1.18.9"
+		"@zeit/next-css": "^1.0.1",
+		"file-loader": "^3.0.1",
+		"nodemon": "^1.18.9",
+		"url-loader": "^1.1.2",
+		"webpack": "^4.29.6"
 	}
 }

@@ -1,10 +1,19 @@
 import Router from 'next/router'
-import axios from 'axios'
-import { SIGNED_IN, SIGN_OUT, SIGN_IN_ERROR, SIGNING_IN, SIGNED_UP, SIGN_UP_ERROR, SIGNING_UP, EMAIL_CONFIRMED_ERROR, EMAIL_CONFIRMED } from '../types'
+import {
+  SIGNED_IN,
+  SIGN_OUT,
+  SIGN_IN_ERROR,
+  SIGNING_IN,
+  SIGNED_UP,
+  SIGN_UP_ERROR,
+  SIGNING_UP,
+  EMAIL_CONFIRMED_ERROR,
+  EMAIL_CONFIRMED
+} from '../types'
 import { setCookie, removeCookie } from '../../lib/cookie'
-import api from '../../lib/api';
+import api from '../../lib/api'
 
-//get token from the api and stores it in the redux store and in cookie then return to main page
+//  get token from the api and stores it in the redux store and in cookie then return to main page
 const signIn = ({ email, password }) => async dispatch => {
   try {
     dispatch({
@@ -19,7 +28,6 @@ const signIn = ({ email, password }) => async dispatch => {
       }
 
       setCookie('token', result.token)
-
 
       dispatch({
         type: SIGNED_IN,
@@ -41,20 +49,23 @@ const signUp = ({ email, password, username }) => async dispatch => {
     dispatch({ type: SIGNING_UP })
     if (typeof email === 'string' && typeof password === 'string') {
       // trim fields
-      email = email.trim()
-      username = username.trim()
-      password = password.trim()
+      const userEmail = email.trim()
+      const userUsername = username.trim()
+      const userPassword = password.trim()
 
       // Check for email && password length
-      if (email.length > 0 && password.length > 0) {
-        const result = await api.post('api/signup', { email, password, username })
+      if (userEmail.length > 0 && userPassword.length > 0) {
+        const result = await api.post('api/signup', {
+          email: userEmail,
+          password: userPassword,
+          username: userUsername
+        })
         if (result) {
           dispatch({
-            type: SIGNED_UP,
+            type: SIGNED_UP
           })
           Router.push('/check-email')
         }
-
       } else {
         throw new Error("Email & Password Field shouldn't be empty")
       }
@@ -70,14 +81,14 @@ const signUp = ({ email, password, username }) => async dispatch => {
   }
 }
 
-//set token to cookie and state again
-const reauthenticate = (token) => {
+//  set token to cookie and state again
+const reauthenticate = token => {
   return dispatch => {
     dispatch({ type: SIGNED_IN, payload: { token } })
   }
 }
 
-//remove token from cookie and from state then return to main page
+//  remove token from cookie and from state then return to main page
 const signout = () => {
   return dispatch => {
     removeCookie('token')
@@ -97,7 +108,7 @@ const emailConfirm = ({ username, token }) => async disaptch => {
   }
 }
 
-const resendEmailVerification = (userId) => async () => {
+const resendEmailVerification = userId => async () => {
   try {
     await api.post('api/email-resend', { userId })
   } catch (err) {
@@ -105,7 +116,7 @@ const resendEmailVerification = (userId) => async () => {
   }
 }
 
-const sendForgottenPasswordEmail = (email) => async () => {
+const sendForgottenPasswordEmail = email => async () => {
   try {
     await api.post('/api/forgot-password', { email })
   } catch (err) {

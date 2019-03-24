@@ -1,11 +1,15 @@
+import 'semantic-ui-css/semantic.min.css'
 import React from 'react'
 import Link from 'next/link'
 
 import { connect } from 'react-redux'
-import initialize from '../lib/initialize'
 
 import selector from '../redux/selectors/selectors'
 import actions from '../redux/actions/actions'
+
+import { Button } from 'semantic-ui-react'
+
+import './styles.css'
 
 class Index extends React.Component {
   signoutHandler = () => {
@@ -22,7 +26,7 @@ class Index extends React.Component {
           <a href='#' onClick={this.signoutHandler}>Logout</a>
           <br />
           <Link href="/profile">
-            <a>Go to Profile</a>
+            <Button>Go to Profile</Button>
           </Link>
         </div>
       )

@@ -1,7 +1,8 @@
-const User = require('../models/User')
-const emailService = require('../services/emailService')
 const jwt = require('jsonwebtoken')
 const bcrypt = require('bcryptjs')
+
+const User = require('../models/User')
+const emailService = require('../services/emailService')
 
 module.exports = {
   signIn: async (email, password) => {
@@ -73,7 +74,7 @@ module.exports = {
       throw err
     }
   },
-  resendEmailVerification: async (userId) => {
+  resendEmailVerification: async userId => {
     try {
       const user = await User.findById(userId)
       if (!user) throw new Error('User not exists')
@@ -90,7 +91,7 @@ module.exports = {
       throw new Error(err.message)
     }
   },
-  forgotPassword: async (email) => {
+  forgotPassword: async email => {
     try {
       const user = await User.findOne({ email: email })
       if (!user) throw new Error('User not exists')
