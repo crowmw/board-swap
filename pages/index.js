@@ -1,17 +1,21 @@
-import 'semantic-ui-css/semantic.min.css'
 import React from 'react'
 import Link from 'next/link'
 
 import { connect } from 'react-redux'
+import initialize from '../lib/initialize'
 
 import selector from '../redux/selectors/selectors'
 import actions from '../redux/actions/actions'
 
+import Layout from '../components/Layout'
+
 import { Button } from 'semantic-ui-react'
 
-import './styles.css'
-
 class Index extends React.Component {
+  // static getInitialProps = (ctx) => {
+  //   initialize(ctx)
+  // }
+
   signoutHandler = () => {
     this.props.signout()
   }
@@ -34,18 +38,20 @@ class Index extends React.Component {
 
     return (
       <div>
-        <h1> Auth Example with Next.js and Apollo </h1>
-        <Link href="/signin">
-          <a>Sign In</a>
-        </Link>{' '}
-        or{' '}
-        <Link href="/signup">
-          <a>Sign Up</a>
-        </Link>{' '}
-        <Link href="/profile">
-          <a>Profile</a>
-        </Link>{' '}
-        to view hidden resources
+        <Layout>
+          <h1> Auth Example with Next.js and Apollo </h1>
+          <Link href="/signin">
+            <a>Sign In</a>
+          </Link>{' '}
+          or{' '}
+          <Link href="/signup">
+            <a>Sign Up</a>
+          </Link>{' '}
+          <Link href="/profile">
+            <a>Profile</a>
+          </Link>{' '}
+          to view hidden resources
+        </Layout>
       </div>
     )
   }

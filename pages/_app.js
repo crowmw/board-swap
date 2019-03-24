@@ -1,8 +1,10 @@
+import 'semantic-ui-css/semantic.min.css'
 import { Provider } from 'react-redux'
 import App, { Container } from 'next/app'
 import Head from 'next/head'
 import withRedux from 'next-redux-wrapper'
 import { initStore } from '../redux/index'
+import './styles.css'
 
 export default withRedux(initStore, { debug: false })(
   class BoardSwap extends App {
