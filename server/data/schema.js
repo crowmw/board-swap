@@ -35,6 +35,7 @@ const typeDefs = `
 	}
 	type BoardGame {
 		_id: ID!
+		slug: String
 		name: String
 		originalName: String
 		year: Int
@@ -116,7 +117,7 @@ const typeDefs = `
 
 	type Query {
 		user(userId: String!): User
-		boardGame(_id: ID!): BoardGame
+		boardGame(slug: String!): BoardGame
 		boardGames(find: String, skip: Int, first: Int, orderBy: BoardGameOrderByEnum): [BoardGame]!
 		category(_id: ID!): Category
 		categories: [Category]
@@ -135,6 +136,7 @@ const typeDefs = `
 		createBoardGame(boardGame: BoardGameCreateInput): BoardGame
 		updateBoardGame(boardGame: BoardGameUpdateInput): BoardGame
 		importBggUserBoardGames(bggUsername: String!): Boolean
+		seedBoardGamesFromBggUser(bggUsername: String!): Boolean
 	}
 `
 

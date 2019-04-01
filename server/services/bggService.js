@@ -179,6 +179,74 @@ const BGGService = {
 
     //TODO: Przydzielanie gier userowi do właściwych tablic
     return true
+  },
+  seedBoardGamesFromBggUser: async (bggUsername) => {
+    //pobranie ustawionego bggUsername
+    const bggCollection = await BGGService.fetchBggUserCollection(bggUsername)
+    if (bggCollection.length === 0) throw new Error('There is no games in BGG collection')
+    const bggCollectionIds = bggCollection.map(bg => bg.bggId)
+    const existedBGs = await BoardGame.find({ bggId: { $in: bggCollectionIds } })
+
+    const notExistedBG = bggCollectionIds.filter(id => !existedBGs.map(existedBG => existedBG.bggId).includes(id))
+    if (notExistedBG.length) {
+      const boardGames = await BGGService.fetchBggBoardGames(notExistedBG)
+
+      //dodaj kategorie które nie istnieją
+      const notExistedCategories = boardGames.reduce((prev, curr, index) => {
+        if (index === 1) {
+          return [...new Set(prev.category, ...curr.category)]
+        }
+        return [...new Set([...prev, ...curr.category])]
+      })
+
+      let categoriesToSave = []
+      for (let cat of notExistedCategories) {
+        const c = await Category.findOne({ name: cat })
+        if (!c) {
+          categoriesToSave.push(new Category({
+            name: cat
+          }))
+        }
+      }
+
+      await Category.insertMany(categoriesToSave)
+
+      //Add new boardgames
+      let bgToSave = []
+      for (let bg of boardGames) {
+        const boardGameCategories = await Category.find({ name: { $in: bg.category } })
+        const categoryIds = boardGameCategories.map(bgc => bgc._id)
+
+        bgToSave.push(new BoardGame({
+          bggId: bg.bggId,
+          year: bg.year,
+          minPlayers: bg.minPlayers,
+          maxPlayers: bg.maxPlayers,
+          playingTime: bg.playingTime,
+          age: bg.age,
+          thumbnail: bg.thumbnail,
+          image: bg.image,
+          designer: bg.designer,
+          originalName: bg.originalName,
+          name: bg.originalName,
+          category: categoryIds
+        }))
+      }
+
+      const savedBoardGames = await BoardGame.insertMany(bgToSave)
+
+      //Add new board games to categories
+      for (let savedBG of savedBoardGames) {
+        for (let categoryId of savedBG.category) {
+          const cat = await Category.findOne({ _id: categoryId })
+          cat.boardGames.push(savedBG._id)
+          cat.save()
+        }
+      }
+    }
+
+    //TODO: Przydzielanie gier userowi do właściwych tablic
+    return true
   }
 }
 

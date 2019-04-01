@@ -2,11 +2,11 @@ import React from 'react'
 import Link from 'next/link'
 import { Item, Label, Icon } from 'semantic-ui-react';
 
-const BoardGameListItem = ({ boardGame: { _id, name, year, thumbnail, category } }) => {
+const BoardGameListItem = ({ boardGame: { _id, slug, name, year, thumbnail, category } }) => {
   return (
     <Item key={_id} >
-      <Link href={`/board-game/${_id}`}>
-        <Item.Image as='a' src={thumbnail} size='small' style={{position: 'relative'}} />
+      <Link href={`/board-game/${slug}`}>
+        <Item.Image as='a' src={thumbnail} size='small' style={{ position: 'relative' }} />
       </Link>
       <Item.Content>
         <Item.Header as='a' >{name}</Item.Header>
@@ -16,7 +16,6 @@ const BoardGameListItem = ({ boardGame: { _id, name, year, thumbnail, category }
         <Item.Extra>
           {category.map(cat => <Label key={cat._id}>{cat.name}</Label>)}
         </Item.Extra>
-
       </Item.Content>
     </Item>
   )

@@ -1,4 +1,5 @@
 const mongoose = require('mongoose')
+const URLSlugs = require('mongoose-url-slugs')
 const mongodbErrorHandler = require('mongoose-mongodb-errors')
 
 const { Schema } = mongoose
@@ -35,5 +36,7 @@ const boardGameSchema = new Schema({
 )
 
 boardGameSchema.plugin(mongodbErrorHandler)
+
+boardGameSchema.plugin(URLSlugs('originalName', { field: 'slug', update: true }))
 
 module.exports = mongoose.model('BoardGame', boardGameSchema)

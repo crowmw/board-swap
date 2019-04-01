@@ -56,6 +56,8 @@ app.prepare().then(() => {
 
   require('./routes')(server)
 
+  require('./cleanRoutes')(server, app)
+
   server.get('*', (req, res) => {
     return handle(req, res)
   })

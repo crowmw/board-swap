@@ -2,6 +2,14 @@ import categoriesSelector from "./categoriesSelector";
 
 const getBoardGames = state => state.boardGames.byId
 
+const getBoardGameBySlug = (state, slug) => {
+  const boardGames = getBoardGames(state)
+  if (boardGames) {
+    const bg = Object.values(boardGames).find(bg => bg.slug === slug)
+    return bg
+  }
+}
+
 const getBoardGamesWithCategories = state => {
   const boardGames = getBoardGames(state)
   if (boardGames) {
@@ -23,5 +31,6 @@ const getBoardGamesIds = state => {
 export default {
   getBoardGames,
   getBoardGamesIds,
-  getBoardGamesWithCategories
+  getBoardGamesWithCategories,
+  getBoardGameBySlug
 }

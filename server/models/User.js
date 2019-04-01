@@ -1,4 +1,5 @@
 const mongoose = require('mongoose')
+const URLSlugs = require('mongoose-url-slugs')
 
 const Schema = mongoose.Schema
 mongoose.Promise = global.Promise
@@ -38,5 +39,7 @@ const userSchema = new Schema({
 		type: Schema.Types.ObjectId, ref: 'UserBoardGame'
 	}]
 })
+
+userSchema.plugin(URLSlugs('username', { field: 'slug', update: true }))
 
 module.exports = mongoose.model('User', userSchema)

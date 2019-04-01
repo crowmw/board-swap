@@ -10,7 +10,7 @@ const bggService = require('../services/bggService')
 module.exports = {
 	Query: {
 		user: isAdmin((root, { userId }) => userController.fetchUser(userId)),
-		boardGame: (root, { _id }) => boardGameController.fetchBoardGame(_id),
+		boardGame: (root, { slug }) => boardGameController.fetchBoardGame(slug),
 		boardGames: (root, { find, skip, first, orderBy }) => boardGameController.fetchBoardGames({ find, skip, first, orderBy }),
 		category: (root, { _id }) => categoryController.fetchCategory(_id),
 		categories: () => categoryController.fetchCategories(),
@@ -23,6 +23,7 @@ module.exports = {
 		addUserBoardGame: authenticated((root, { _id }, { userId }) => userController.putUserBoardGame(userId, _id)),
 		createBoardGame: (root, { boardGame }) => boardGameController.createBoardGame(boardGame),
 		updateBoardGame: (root, { boardGame }) => boardGameController.updateBoardGame(boardGame),
-		importBggUserBoardGames: authenticated((root, { bggUsername }, { userId }) => bggService.importBggUserBoardGames(userId, bggUsername))
+		importBggUserBoardGames: (root, { bggUsername }, { userId }) => bggService.importBggUserBoardGames(userId, bggUsername),
+		seedBoardGamesFromBggUser: isAdmin((root, { bggUsername }) => bggService.seedBoardGamesFromBggUser(bggUsername))
 	}
 }

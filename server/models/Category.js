@@ -1,4 +1,5 @@
 const mongoose = require('mongoose')
+const URLSlugs = require('mongoose-url-slugs')
 const mongodbErrorHandler = require('mongoose-mongodb-errors')
 
 const { Schema } = mongoose
@@ -20,5 +21,7 @@ const categorySchema = new Schema({
 )
 
 categorySchema.plugin(mongodbErrorHandler)
+
+categorySchema.plugin(URLSlugs('name', { field: 'slug', update: true }))
 
 module.exports = mongoose.model('Category', categorySchema)

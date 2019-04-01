@@ -6,9 +6,9 @@ const prepareId = (o) => {
 }
 
 module.exports = {
-  fetchBoardGame: async (id) => {
+  fetchBoardGame: async (slug) => {
     try {
-      const boardGame = await BoardGame.findOne({ _id: id }).populate('category')
+      const boardGame = await BoardGame.findOne({ slug: slug }).populate('category')
       if (!boardGame) throw new Error('BoardGame not found')
       return prepareId(boardGame)
     } catch (err) {
