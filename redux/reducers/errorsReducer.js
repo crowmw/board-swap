@@ -4,7 +4,8 @@ import { combineReducers } from 'redux';
 const initialState = {
   signInError: null,
   signUpError: null,
-  emailConfirmError: null
+  emailConfirmError: null,
+  fetchBoardGamesError: null
 }
 
 const signInError = (state = initialState.signInError, { type, payload }) => {
@@ -40,8 +41,20 @@ const emailConfirmError = (state = initialState.emailConfirmError, { type, paylo
   }
 }
 
+const fetchBoardGamesError = (state = initialState.fetchBoardGamesError, { type, payload }) => {
+  switch (type) {
+    case types.BOARD_GAMES_FETCHING_ERROR:
+      return payload.error
+    case types.BOARD_GAMES_FETCHING_SUCCESS:
+      return initialState.fetchBoardGamesError
+    default:
+      return state
+  }
+}
+
 export default combineReducers({
   signInError,
   signUpError,
-  emailConfirmError
+  emailConfirmError,
+  fetchBoardGamesError
 })

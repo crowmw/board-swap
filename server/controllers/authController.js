@@ -8,7 +8,6 @@ module.exports = {
   signIn: async (email, password) => {
     try {
       const user = await User.findOne({ email: email })
-      console.log('UUUUSSSSEEEERRRR:', email, password, user)
       if (!user) throw new Error('User does not exists!')
 
       const isEqual = await bcrypt.compare(password, user.password)
@@ -114,7 +113,6 @@ module.exports = {
       if (!password) throw new Error('Password must be provided')
 
       const user = await User.findOne({ forgotPasswordToken: token })
-      console.log('USER FOUND!:', user)
       if (!user) throw new Error('Cannot find user')
 
       const hashedPassword = await bcrypt.hash(password, 12)

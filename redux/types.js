@@ -9,3 +9,7 @@ export const SIGN_UP_ERROR = 'sign_up_error'
 
 export const EMAIL_CONFIRMED = 'email_confirmed'
 export const EMAIL_CONFIRMED_ERROR = 'email_confirmed_error'
+
+export const BOARD_GAMES_FETCHING = 'board_games_fetching'
+export const BOARD_GAMES_FETCHING_SUCCESS = 'board_games_fetching_success'
+export const BOARD_GAMES_FETCHING_ERROR = 'board_games_fetching_error'

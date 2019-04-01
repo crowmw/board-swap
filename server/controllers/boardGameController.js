@@ -31,29 +31,37 @@ module.exports = {
         : BoardGame.find({})
       boardGames.populate('category')
 
-      if (skip) {
-        boardGames.skip(skip)
+      if (orderBy) {
+        switch (orderBy) {
+          case 'name_ASC':
+            boardGames.collation({ locale: 'pl', strength: 2 }).sort({ name: 1 })
+            break
+          case 'name_DESC':
+            boardGames.collation({ locale: 'pl', strength: 2 }).sort({ name: -1 })
+            break
+          case 'createdAt_ASC':
+            boardGames.sort({ createdAt: 'asc' })
+            break
+          case 'createdAt_DESC':
+            boardGames.sort({ createdAt: 'desc' })
+            break
+          case 'updatedAt_ASC':
+            boardGames.sort({ updatedAt: 'asc' })
+            break
+          case 'updatedAt_DESC':
+            boardGames.sort({ updatedAt: 'asc' })
+            break
+          default:
+            boardGames.collation({ locale: 'pl', strength: 2 }).sort({ name: 1 })
+        }
       }
 
       if (first) {
         boardGames.limit(first)
       }
 
-      if (orderBy) {
-        switch (orderBy) {
-          case 'name_ASC':
-            boardGames.sort({ name: 'asc' })
-          case 'name_DESC':
-            boardGames.sort({ name: 'desc' })
-          case 'createdAt_ASC':
-            boardGames.sort({ createdAt: 'asc' })
-          case 'createdAt_DESC':
-            boardGames.sort({ createdAt: 'desc' })
-          case 'updatedAt_ASC':
-            boardGames.sort({ updatedAt: 'asc' })
-          case 'updatedAt_DESC':
-            boardGames.sort({ updatedAt: 'asc' })
-        }
+      if (skip) {
+        boardGames.skip(skip)
       }
 
       const result = await boardGames.exec()

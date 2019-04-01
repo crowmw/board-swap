@@ -10,10 +10,11 @@ import actions from '../redux/actions/actions'
 import Layout from '../components/Layout'
 
 import { Button } from 'semantic-ui-react'
+import BoardGamesList from '../components/BoardGamesList';
 
 class Index extends React.Component {
-  // static getInitialProps = (ctx) => {
-  //   initialize(ctx)
+  // static getInitialProps = async ({ store }) => {
+  //   await store.dispatch(actions.fetchBoardGames())
   // }
 
   signoutHandler = () => {
@@ -25,34 +26,38 @@ class Index extends React.Component {
     const { signedIn } = this.props
     if (signedIn) {
       return (
-        <div>
+        <Layout>
           <h1> Hello! </h1>
           <a href='#' onClick={this.signoutHandler}>Logout</a>
           <br />
           <Link href="/profile">
             <Button>Go to Profile</Button>
           </Link>
-        </div>
+          <Link href="/board-games">
+            <Button>BoardGames</Button>
+          </Link>
+        </Layout>
       )
     }
 
     return (
-      <div>
-        <Layout>
-          <h1> Auth Example with Next.js and Apollo </h1>
-          <Link href="/signin">
-            <a>Sign In</a>
-          </Link>{' '}
-          or{' '}
-          <Link href="/signup">
-            <a>Sign Up</a>
-          </Link>{' '}
-          <Link href="/profile">
-            <a>Profile</a>
-          </Link>{' '}
-          to view hidden resources
+      <Layout>
+        <h1> Auth Example with Next.js and Apollo </h1>
+        <Link href="/signin">
+          <a>Sign In</a>
+        </Link>{' '}
+        or{' '}
+        <Link href="/signup">
+          <a>Sign Up</a>
+        </Link>{' '}
+        <Link href="/profile">
+          <a>Profile</a>
+        </Link>{' '}
+        <Link href="/board-games">
+          <Button>BoardGames</Button>
+        </Link>
+        to view hidden resources
         </Layout>
-      </div>
     )
   }
 }

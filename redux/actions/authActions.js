@@ -126,7 +126,6 @@ const sendForgottenPasswordEmail = email => async () => {
 
 const changeForgottenPassword = ({ password, token }) => async () => {
   try {
-    console.log('ACTION_PROPS', password, token)
     await api.post('/api/change-forgotten-password', { password, token })
     Router.push('/signin')
   } catch (err) {

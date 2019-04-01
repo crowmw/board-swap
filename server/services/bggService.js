@@ -160,7 +160,7 @@ const BGGService = {
           image: bg.image,
           designer: bg.designer,
           originalName: bg.originalName,
-          name: `${bg.originalName} [ENG]`,
+          name: bg.originalName,
           category: categoryIds
         }))
       }
