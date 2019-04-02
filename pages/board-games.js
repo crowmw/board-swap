@@ -1,25 +1,60 @@
-import React from 'react'
+import React, { useState, useEffect } from 'react'
+import Router from 'next/router'
 import { connect } from 'react-redux'
 
-import Layout from '../components/Layout'
+import { Pagination } from 'semantic-ui-react';
+
 import BoardGamesList from '../components/BoardGamesList'
 import actions from '../redux/actions/actions'
 import selectors from '../redux/selectors/selectors'
 
-const BoardGames = ({ boardGames }) => {
+const BoardGames = ({ boardGames, totalPages = 48, page }) => {
+  const [activePage, changePage] = useActivePageChange(page);
+
   return (
-    <Layout>
-      <BoardGamesList boardGames={boardGames} />
-    </Layout>
+    <>
+      <div className='board-games'>
+        <BoardGamesList boardGames={boardGames} />
+        <Pagination
+          activePage={activePage}
+          onPageChange={changePage}
+          siblingRange={1}
+          boundaryRange={0}
+          firstItem={null}
+          lastItem={null}
+          pointing
+          size='tiny'
+          secondary
+          totalPages={totalPages}
+          style={{ display: 'flex', justifyContent: 'center' }}
+        />
+      </div>
+      <style jsx>{`
+      .board-games {
+        display: flex;
+        flex-flow: column;
+      }
+    `}</style>
+    </>
   )
 }
 
-BoardGames.getInitialProps = async ({ store }) => {
-  await store.dispatch(actions.fetchBoardGames({ first: 20 }))
+BoardGames.getInitialProps = async ({ store, query: { page = 1 } }) => {
+  const skip = (page - 1) * 48
+  const boardGames = await actions.fetchBoardGames({ skip, first: 48 })
+  return { boardGames, page }
 }
 
-const mapStateToProps = state => ({
-  boardGames: selectors.getBoardGamesWithCategories(state)
-})
+function useActivePageChange(page) {
+  const [activePage, setActivePage] = useState(page);
 
-export default connect(mapStateToProps, actions)(BoardGames)
+  const changePage = (e, { activePage }) => setActivePage(activePage)
+
+  useEffect(() => {
+    Router.replace(`/board-games?page=${activePage}`).then(() => window.scrollTo(0, 0));
+  }, [activePage]);
+  return [activePage, changePage]
+}
+
+export default BoardGames
+

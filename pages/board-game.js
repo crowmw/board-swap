@@ -1,18 +1,17 @@
 import { connect } from 'react-redux'
 import PropTypes from 'prop-types'
-import Layout from '../components/Layout'
 import selectors from '../redux/selectors/selectors'
 import actions from '../redux/actions/actions'
 import { Header, Image, Label } from 'semantic-ui-react'
 
 const BoardGamePage = ({ slug, boardGame: { thumbnail, name } }) => {
   return (
-    <Layout>
+    <>
       <div style={{ display: 'flex', flexFlow: 'column', alignItems: 'center', width: '100%' }}>
-        <Image src={thumbnail} />
+        <img src={thumbnail} />
         <h2>{name}</h2>
       </div>
-    </Layout>
+    </>
   )
 }
 

@@ -2,15 +2,11 @@ import React from 'react'
 import Link from 'next/link'
 
 import { connect } from 'react-redux'
-import initialize from '../lib/initialize'
 
 import selector from '../redux/selectors/selectors'
 import actions from '../redux/actions/actions'
 
-import Layout from '../components/Layout'
-
 import { Button } from 'semantic-ui-react'
-import BoardGamesList from '../components/BoardGamesList';
 
 class Index extends React.Component {
   // static getInitialProps = async ({ store }) => {
@@ -26,7 +22,7 @@ class Index extends React.Component {
     const { signedIn } = this.props
     if (signedIn) {
       return (
-        <Layout>
+        <>
           <h1> Hello! </h1>
           <a href='#' onClick={this.signoutHandler}>Logout</a>
           <br />
@@ -36,12 +32,12 @@ class Index extends React.Component {
           <Link href="/board-games">
             <Button>BoardGames</Button>
           </Link>
-        </Layout>
+        </>
       )
     }
 
     return (
-      <Layout>
+      <>
         <h1> Auth Example with Next.js and Apollo </h1>
         <Link href="/signin">
           <a>Sign In</a>
@@ -57,7 +53,7 @@ class Index extends React.Component {
           <Button>BoardGames</Button>
         </Link>
         to view hidden resources
-        </Layout>
+        </>
     )
   }
 }

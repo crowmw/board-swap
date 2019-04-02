@@ -1,6 +1,5 @@
-import React from 'react'
+import React, { useState } from 'react'
 import Link from 'next/link'
-import { Item, Label, Icon } from 'semantic-ui-react';
 
 const BoardGameListItem = ({ boardGame: { _id, slug, name, year, thumbnail, category } }) => {
   return (
@@ -20,6 +19,7 @@ const BoardGameListItem = ({ boardGame: { _id, slug, name, year, thumbnail, cate
       margin: 0 0 1.5em 0;
       width: 100%;
       box-shadow: 0 1px 5px 0 #cccccc;
+      break-inside: avoid;
       }
 
       img {
@@ -28,16 +28,14 @@ const BoardGameListItem = ({ boardGame: { _id, slug, name, year, thumbnail, cate
 
       h2 {
         margin: 0;
-        padding: 0;
-        padding-top: 0.5em;
+        padding: 0.5em 0.3em 0 0.3em ;
         font-size: 1em;
       }
 
       h3 {
         margin: 0;
-        padding: 0;
-        padding-bottom: 0.5em;
-        font-size:1em;
+        padding: 0 0.3em 0.5em 0.3em;
+        font-size:0.8em;
         font-weight: 300;
         color: #9f9f9f;
       }
@@ -47,20 +45,20 @@ const BoardGameListItem = ({ boardGame: { _id, slug, name, year, thumbnail, cate
   )
 }
 
-const BoardGamesList = ({ boardGames }) => {
+const BoardGamesList = ({ boardGames, total }) => {
   return (
     <>
       <div className='board-games-list'>
         {boardGames
           ? boardGames.map(bg => (
-            <BoardGameListItem boardGame={bg} />
+            <BoardGameListItem key={bg._id} boardGame={bg} />
           )
           )
           : null}
       </div>
       <style jsx>{`
     .board-games-list{
-      margin: 0 1em;
+      margin: 0 1em 1em 1em;
       column-count: 2;
       column-gap: 1em;
     }
