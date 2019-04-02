@@ -37,7 +37,7 @@ const MobileNavBar = () => {
 }
 
 const NavBarChildren = ({ children }) => (
-  <Container fluid style={{ position: 'absolute', top: "5em" }}>{children}</Container>
+  <div style={{ position: 'absolute', top: "5em", width: '100vw' }}>{children}</div>
 )
 
 // const NavBarDesktop = ({ leftItems, rightItems }) => (

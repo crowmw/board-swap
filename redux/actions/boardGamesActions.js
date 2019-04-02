@@ -38,11 +38,11 @@ const fetchBoardGames = ({ find, first = 30, skip = 0, orderBy = 'name_ASC' }) =
   }
 }
 
-const fetchBoardGame = (slug) => async (dispatch, getState) => {
-  dispatch({ type: BOARD_GAME_FETCHING })
-
+const fetchBoardGame = async (slug) => {
+  // dispatch({ type: BOARD_GAME_FETCHING })
+  // console.log('ACTION', slug)
   const query = `{
-    boardGame(slug: ${slug}) {
+    boardGame(slug: "${slug}") {
       _id
       slug
       name
@@ -64,12 +64,15 @@ const fetchBoardGame = (slug) => async (dispatch, getState) => {
 
   try {
     const result = await api.graphql(query)
+    // console.log('RESULT', result)
     if (result) {
       const normalized = normalize(result.boardGame, normalizrSchema.boardGame)
-      dispatch({ type: BOARD_GAME_FETCHING_SUCCESS, payload: { boardGame: normalized.entities.boardGame, categories: normalized.entities.category } })
+      // dispatch({ type: BOARD_GAME_FETCHING_SUCCESS, payload: { boardGame: normalized.entities.boardGame, categories: normalized.entities.category } })
+      return { boardGame: result.boardGame }
     }
   } catch (err) {
-    dispatch({ type: BOARD_GAME_FETCHING_ERROR, payload: { error: err.message } })
+    console.error(err)
+    // dispatch({ type: BOARD_GAME_FETCHING_ERROR, payload: { error: err.message } })
   }
 }
 

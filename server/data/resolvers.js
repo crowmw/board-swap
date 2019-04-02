@@ -10,7 +10,10 @@ const bggService = require('../services/bggService')
 module.exports = {
 	Query: {
 		user: isAdmin((root, { userId }) => userController.fetchUser(userId)),
-		boardGame: (root, { slug }) => boardGameController.fetchBoardGame(slug),
+		boardGame: (root, { slug }) => {
+			console.log('RESOLVER', slug)
+			return boardGameController.fetchBoardGame(slug)
+		},
 		boardGames: (root, { find, skip, first, orderBy }) => boardGameController.fetchBoardGames({ find, skip, first, orderBy }),
 		category: (root, { _id }) => categoryController.fetchCategory(_id),
 		categories: () => categoryController.fetchCategories(),
